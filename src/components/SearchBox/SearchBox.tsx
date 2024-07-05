@@ -2,6 +2,7 @@ import React from 'react';
 import './SearchBox.css';
 
 interface Props {
+	searchTerm: string;
 	onSearch: (searchTerm: string) => void;
 }
 
@@ -12,16 +13,13 @@ interface State {
 class SearchBox extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
-		const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-		this.state = { searchTerm: savedSearchTerm };
+		this.state = { searchTerm: props.searchTerm };
 	}
 	handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({ searchTerm: event.target.value });
 	};
 	handleSearch = () => {
-		const { searchTerm } = this.state;
-		const trimmedTerm = searchTerm.trim();
-		localStorage.setItem('searchTerm', trimmedTerm);
+		const trimmedTerm = this.state.searchTerm.trim();
 		this.props.onSearch(trimmedTerm);
 	};
 

@@ -12,11 +12,12 @@ interface State {
 class App extends React.Component<Record<string, never>, State> {
 	constructor(props: Record<string, never>) {
 		super(props);
-		const savedSearchTerm = localStorage.getItem('searchTerm' || '');
+		const savedSearchTerm = localStorage.getItem('searchTerm') || '';
 		this.state = { searchTerm: savedSearchTerm };
 	}
 
 	handleSearch = (searchTerm: string) => {
+		localStorage.setItem('searchTerm', searchTerm);
 		this.setState({ searchTerm });
 	};
 
@@ -25,7 +26,7 @@ class App extends React.Component<Record<string, never>, State> {
 			<ErrorBoundary>
 				<div className="app">
 					<div className="top-section">
-						<SearchBox onSearch={this.handleSearch} />
+						<SearchBox searchTerm={this.state.searchTerm} onSearch={this.handleSearch} />
 						<ErrorButton />
 					</div>
 					<div className="bottom-section">
