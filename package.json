@@ -8,7 +8,7 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint src",
 		"lint:fix": "eslint src --fix",
-		"format:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+		"format:fix": "prettier --write ./src",
 		"preview": "vite preview",
 		"prepare": "husky",
 		"test": "jest",

@@ -19,9 +19,6 @@ class App extends React.Component<Record<string, never>, State> {
 	handleSearch = (searchTerm: string) => {
 		this.setState({ searchTerm });
 	};
-	throwError = () => {
-		throw new Error('Test error');
-	};
 
 	render() {
 		return (

@@ -44,7 +44,7 @@ class ResultsBox extends React.Component<Props, State> {
 			}));
 			this.setState({ results, loading: false });
 		} catch (error) {
-			console.log('Error fetching data:', error);
+			console.error('Error fetching data:', error);
 			this.setState((prevState) => ({
 				...prevState,
 				loading: false,
