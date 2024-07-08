@@ -20,13 +20,13 @@ class ResultsBox extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount() {
-		this.fetchResults();
+	async componentDidMount() {
+		await this.fetchResults();
 	}
 
-	componentDidUpdate(prevProps: Props) {
+	async componentDidUpdate(prevProps: Props) {
 		if (prevProps.searchTerm !== this.props.searchTerm) {
-			this.fetchResults();
+			await this.fetchResults();
 		}
 	}
 
