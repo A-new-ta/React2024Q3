@@ -1,6 +1,7 @@
 import React from 'react';
 import './ResultsBox.css';
 import { getPlanets } from '../../services/api.ts';
+import { Planet, PlanetAPIResponse } from '../../types/types.ts';
 
 interface Props {
 	searchTerm: string;
@@ -36,8 +37,8 @@ class ResultsBox extends React.Component<Props, State> {
 			loading: true,
 		}));
 		try {
-			const data = await getPlanets(this.props.searchTerm.trim());
-			const results = data.results.map((planet) => ({
+			const data: PlanetAPIResponse = await getPlanets(this.props.searchTerm.trim());
+			const results = data.results.map((planet: Planet) => ({
 				name: planet.name,
 				description: planet.terrain,
 				population: planet.population,
