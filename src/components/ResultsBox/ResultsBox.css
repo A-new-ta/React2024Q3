@@ -1,9 +1,13 @@
-.results-component {
+.results {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.results__block {
 	display: flex;
 	flex-wrap: wrap;
 	padding: 20px;
 }
-
 .card {
 	background-color: #fff;
 	border-radius: 10px;

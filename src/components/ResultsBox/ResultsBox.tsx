@@ -1,76 +1,99 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import './ResultsBox.css';
 import { getPlanets } from '../../services/api.ts';
 import { Planet, PlanetAPIResponse } from '../../types/types.ts';
+import Pagination from '../Pagination/Pagination.tsx';
 
 interface Props {
 	searchTerm: string;
+	onItemClick: (itemId: string) => void;
+	// onCloseDetails: () => void;
 }
 
-interface State {
-	results: { name: string; description: string; population: string }[];
-	loading: boolean;
-}
+const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick }) => {
+	const [results, setResults] = useState<
+		{ name: string; description: string; population: string; id: string }[]
+	>([]);
+	const [loading, setLoading] = useState(false);
+	// const [next, setNext] = useState<string | null>(null);
+	// const [previous, setPrevious] = useState<string | null>(null);
+	const [searchParams, setSearchParams] = useSearchParams();
+	const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
+	const [totalPages, setTotalPages] = useState(1);
+	const previousSearchTerm = useRef<string>(searchTerm);
 
-class ResultsBox extends React.Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			results: [],
-			loading: false,
-		};
-	}
-
-	async componentDidMount() {
-		await this.fetchResults();
-	}
-
-	async componentDidUpdate(prevProps: Props) {
-		if (prevProps.searchTerm !== this.props.searchTerm) {
-			await this.fetchResults();
-		}
-	}
-
-	fetchResults = async () => {
-		this.setState((prevState) => ({
-			...prevState,
-			loading: true,
-		}));
+	const fetchResults = useCallback(async () => {
+		setLoading(true);
 		try {
-			const data: PlanetAPIResponse = await getPlanets(this.props.searchTerm.trim());
+			const data: PlanetAPIResponse = await getPlanets(searchTerm.trim(), currentPage);
 			const results = data.results.map((planet: Planet) => ({
 				name: planet.name,
 				description: planet.terrain,
 				population: planet.population,
+				id: planet.url.split('/').slice(-2, -1)[0],
+				count: planet.count,
 			}));
-			this.setState({ results, loading: false });
+			setResults(results);
+			setTotalPages(Math.ceil(data.count / 10));
+			// setNext(data.next);
+			// setPrevious(data.previous);
+			setLoading(false);
 		} catch (error) {
 			console.error('Error fetching data:', error);
-			this.setState((prevState) => ({
-				...prevState,
-				loading: false,
-			}));
+			setLoading(false);
 		}
+	}, [searchTerm, currentPage]);
+
+	useEffect(() => {
+		if (previousSearchTerm.current !== searchTerm) {
+			setSearchParams({ search: searchTerm, page: '1' });
+			previousSearchTerm.current = searchTerm;
+		}
+	}, [searchTerm, setSearchParams]);
+
+	useEffect(() => {
+		fetchResults();
+	}, [fetchResults]);
+	const handlePageChange = (newPage: number) => {
+		setSearchParams({ search: searchTerm, page: newPage.toString() });
 	};
 
-	render() {
-		const { results, loading } = this.state;
-		if (loading) {
-			return <div className="loading">Loading...</div>;
-		}
+	// const handleNextPage = () => {
+	// 	if (next) {
+	// 		handlePageChange(currentPage + 1);
+	// 	}
+	// };
 
-		return (
-			<div className="results-component">
+	// const handlePreviousPage = () => {
+	// 	if (previous) {
+	// 		handlePageChange(currentPage - 1);
+	// 	}
+	// };
+	if (loading) {
+		return <div className="loading">Loading...</div>;
+	}
+
+	return (
+		<div className="results">
+			<div className="results__block">
 				{results.map((result, index) => (
-					<div key={index} className="card">
+					<div key={index} className="card" onClick={() => onItemClick(result.id)}>
 						<h3>{result.name}</h3>
 						<p>{result.description}</p>
 						<p>{result.population}</p>
 					</div>
 				))}
 			</div>
-		);
-	}
-}
+			{results.length > 0 && (
+				<Pagination
+					currentPage={currentPage}
+					onPageChange={handlePageChange}
+					totalPages={totalPages}
+				/>
+			)}
+		</div>
+	);
+};
 
 export default ResultsBox;
