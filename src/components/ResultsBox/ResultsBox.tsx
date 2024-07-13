@@ -80,7 +80,12 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 					<div className="no-results">Nothing found</div>
 				) : (
 					results.map((result, index) => (
-						<div key={index} className="card" onClick={(e) => handleCardClick(result.id, e)}>
+						<div
+							key={index}
+							className="card"
+							role="article"
+							onClick={(e) => handleCardClick(result.id, e)}
+						>
 							<h3>{result.name}</h3>
 							<p>{result.description}</p>
 							<p>{result.population}</p>
