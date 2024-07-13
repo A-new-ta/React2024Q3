@@ -9,11 +9,12 @@
 		"skipLibCheck": true,
 
 		/* Bundler mode */
-		"moduleResolution": "bundler",
+//		"moduleResolution": "bundler",
+        "moduleResolution": "node",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"moduleDetection": "force",
+//		"moduleDetection": "force",
 		"noEmit": true,
 		"jsx": "react-jsx",
 
@@ -22,7 +23,8 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
 	},
-	"include": ["src"]
+  "include": ["src", "jest.config.ts"]
 }

@@ -14,8 +14,6 @@ module.exports = {
     'react-compiler/react-compiler': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
-    'react/jsx-uses-vars': 'error',
-    'react/jsx-uses-react': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
   },
 }

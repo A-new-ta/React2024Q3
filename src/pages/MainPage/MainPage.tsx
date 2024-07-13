@@ -1,7 +1,7 @@
 import { Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import SearchBox from '../../components/SearchBox/SearchBox.tsx';
 import ResultsBox from '../../components/ResultsBox/ResultsBox.tsx';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useLocalStorage from '../../helpers/useLocalStorage.ts';
 import './MainPage.css';
 
@@ -41,7 +41,7 @@ const MainPage = () => {
 				<div className="top-section">
 					<SearchBox searchTerm={searchTerm} onSearch={setSearchTerm} />
 				</div>
-				<div className="bottom-section">
+				<div className="bottom-section" onClick={handleCloseDetails}>
 					<ResultsBox
 						searchTerm={searchTerm}
 						onItemClick={handleItemClick}
