@@ -1,0 +1,31 @@
+.results {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.results__block {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 20px;
+}
+.card {
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition:
+		transform 0.2s,
+		box-shadow 0.2s;
+	padding: 20px;
+	margin: 20px;
+	text-align: center;
+	min-width: 300px;
+}
+
+.card:hover {
+	transform: translateY(-10px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.loading {
+	margin-top: 20px;
+}
