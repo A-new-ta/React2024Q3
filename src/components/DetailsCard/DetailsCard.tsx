@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { getPlanetDetails } from '../../services/api.ts';
 import { PlanetDetails as PlanetDetailsType } from '../../types/types.ts';
 import './DetailsCard.css';
