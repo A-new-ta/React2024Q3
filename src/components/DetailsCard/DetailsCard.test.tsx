@@ -23,16 +23,14 @@ declare global {
 }
 const mockedGetPlanetDetails = getPlanetDetails as jest.MockedFunction<typeof getPlanetDetails>;
 describe('DetailsCard', () => {
-	const renderComponent = () => {
-		return render(
-			<BrowserRouter>
-				<DetailsCard />
-			</BrowserRouter>
-		);
-	};
-
-	it('displays a loading indicator while fetching data', () => {
-		renderComponent();
+	it('displays a loading indicator while fetching data', async () => {
+		await act(async () => {
+			render(
+				<BrowserRouter>
+					<DetailsCard />
+				</BrowserRouter>
+			);
+		});
 
 		const loadingMessage = screen.getByText(/loading.../i);
 		expect(loadingMessage).toBeInTheDocument();
