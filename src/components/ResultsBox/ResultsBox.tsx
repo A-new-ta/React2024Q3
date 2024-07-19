@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import './ResultsBox.css';
-import { getPlanets } from '../../services/api.ts';
-import { Planet, PlanetAPIResponse } from '../../types/types.ts';
+import { useGetPlanetsQuery } from '../../store/apiSlice.ts';
+import { setLoading, setCurrentPageItems } from '../../store/resultsSlice.ts';
+import { RootState } from '../../store/store';
 import Pagination from '../Pagination/Pagination.tsx';
 
 interface Props {
@@ -12,34 +14,12 @@ interface Props {
 }
 
 const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }) => {
-	const [results, setResults] = useState<
-		{ name: string; description: string; population: string; id: string }[]
-	>([]);
-	const [loading, setLoading] = useState(false);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
-	const [totalPages, setTotalPages] = useState(1);
+	const dispatch = useDispatch();
+	const { loading, currentPageItems } = useSelector((state: RootState) => state.results);
+	const { data, error, isFetching } = useGetPlanetsQuery({ search: searchTerm, page: currentPage });
 	const previousSearchTerm = useRef<string>(searchTerm);
-
-	const fetchResults = useCallback(async () => {
-		setLoading(true);
-		try {
-			const data: PlanetAPIResponse = await getPlanets(searchTerm.trim(), currentPage);
-			const results = data.results.map((planet: Planet) => ({
-				name: planet.name,
-				description: planet.terrain,
-				population: planet.population,
-				id: planet.url.split('/').slice(-2, -1)[0],
-				count: planet.count,
-			}));
-			setResults(results);
-			setTotalPages(Math.ceil(data.count / 10));
-			setLoading(false);
-		} catch (error) {
-			console.error('Error fetching data:', error);
-			setLoading(false);
-		}
-	}, [searchTerm, currentPage]);
 
 	useEffect(() => {
 		if (previousSearchTerm.current !== searchTerm) {
@@ -50,8 +30,11 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	}, [searchTerm, setSearchParams, onCloseDetails]);
 
 	useEffect(() => {
-		fetchResults();
-	}, [fetchResults]);
+		dispatch(setLoading(isFetching));
+		if (!isFetching && data) {
+			dispatch(setCurrentPageItems(data.results));
+		}
+	}, [isFetching, data, dispatch]);
 	const handlePageChange = (newPage: number) => {
 		searchParams.delete('details');
 		onCloseDetails();
@@ -72,14 +55,17 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	if (loading) {
 		return <div className="loading">Loading...</div>;
 	}
+	if (error) {
+		return <div className="error">Error loading data</div>;
+	}
 
 	return (
 		<div className="results" onClick={handleContainerClick}>
 			<div className="results__block">
-				{results.length === 0 && !loading ? (
+				{currentPageItems.length === 0 && !loading ? (
 					<div className="no-results">Nothing found</div>
 				) : (
-					results.map((result, index) => (
+					currentPageItems.map((result, index) => (
 						<div
 							key={index}
 							className="card"
@@ -93,12 +79,12 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 					))
 				)}
 			</div>
-			{results.length > 0 && (
+			{currentPageItems.length > 0 && (
 				<div className="pagination" onClick={handlePaginationClick}>
 					<Pagination
 						currentPage={currentPage}
 						onPageChange={handlePageChange}
-						totalPages={totalPages}
+						totalPages={Math.ceil(data.count / 10)}
 					/>
 				</div>
 			)}

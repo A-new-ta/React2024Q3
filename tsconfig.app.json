@@ -24,7 +24,8 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"allowSyntheticDefaultImports": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "skipDefaultLibCheck": true
 	},
   "include": ["src", "jest.config.ts"]
 }
