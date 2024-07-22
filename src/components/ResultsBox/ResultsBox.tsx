@@ -3,9 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './ResultsBox.css';
 import { useGetPlanetsQuery } from '../../store/apiSlice.ts';
-import { setLoading, setCurrentPageItems } from '../../store/resultsSlice.ts';
+import {
+	setLoading,
+	setCurrentPageItems,
+	selectItem,
+	unselectItem,
+} from '../../store/resultsSlice.ts';
 import { RootState } from '../../store/store';
 import Pagination from '../Pagination/Pagination.tsx';
+import { Planet } from '../../types/types.ts';
 
 interface Props {
 	searchTerm: string;
@@ -17,7 +23,9 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	const [searchParams, setSearchParams] = useSearchParams();
 	const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
 	const dispatch = useDispatch();
-	const { loading, currentPageItems } = useSelector((state: RootState) => state.results);
+	const { loading, currentPageItems, selectedItems } = useSelector(
+		(state: RootState) => state.results
+	);
 	const { data, error, isFetching } = useGetPlanetsQuery({ search: searchTerm, page: currentPage });
 	const previousSearchTerm = useRef<string>(searchTerm);
 
@@ -52,6 +60,13 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	const handlePaginationClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.stopPropagation();
 	};
+	const handleCheckboxChange = (planet: Planet) => {
+		if (selectedItems[planet.name]) {
+			dispatch(unselectItem(planet.name));
+		} else {
+			dispatch(selectItem(planet));
+		}
+	};
 	if (loading) {
 		return <div className="loading">Loading...</div>;
 	}
@@ -72,6 +87,12 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 							role="article"
 							onClick={(e) => handleCardClick(result.id, e)}
 						>
+							<input
+								type="checkbox"
+								checked={!!selectedItems[result.name]}
+								onChange={() => handleCheckboxChange(result)}
+								onClick={(e) => e.stopPropagation()}
+							/>
 							<h3>{result.name}</h3>
 							<p>{result.description}</p>
 							<p>{result.population}</p>
