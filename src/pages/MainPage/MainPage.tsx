@@ -1,6 +1,7 @@
 import { Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import SearchBox from '../../components/SearchBox/SearchBox.tsx';
 import ResultsBox from '../../components/ResultsBox/ResultsBox.tsx';
+import Flyout from '../../components/Flyout/Flyout.tsx';
 import { useEffect, useState } from 'react';
 import useLocalStorage from '../../helpers/useLocalStorage.ts';
 import './MainPage.css';
@@ -54,6 +55,7 @@ const MainPage = () => {
 					<Outlet context={{ handleCloseDetails }} />
 				</div>
 			)}
+			<Flyout />
 		</div>
 	);
 };

@@ -94,7 +94,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 								onClick={(e) => e.stopPropagation()}
 							/>
 							<h3>{result.name}</h3>
-							<p>{result.description}</p>
+							<p>{result.terrain}</p>
 							<p>{result.population}</p>
 						</div>
 					))

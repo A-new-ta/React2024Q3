@@ -1,7 +1,6 @@
 .results {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 .results__block {
 	display: flex;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Planet } from '../types/types.ts';
+import { Planet, PlanetDetails } from '../types/types.ts';
 
 interface ResultState {
 	loading: boolean;
@@ -23,14 +23,18 @@ const resultsSlice = createSlice({
 		setCurrentPageItems: (state, action: PayloadAction<Planet[]>) => {
 			state.currentPageItems = action.payload;
 		},
-		selectItem: (state, action: PayloadAction<Planet>) => {
+		selectItem: (state, action: PayloadAction<PlanetDetails>) => {
 			state.selectedItems[action.payload.name] = action.payload;
 		},
 		unselectItem: (state, action: PayloadAction<string>) => {
 			delete state.selectedItems[action.payload];
 		},
+		unselectAllItems: (state) => {
+			state.selectItems = {};
+		},
 	},
 });
 
-export const { setLoading, setCurrentPageItems, selectItem, unselectItem } = resultsSlice.actions;
+export const { setLoading, setCurrentPageItems, selectItem, unselectItem, unselectAllItems } =
+	resultsSlice.actions;
 export default resultsSlice.reducer;
