@@ -29,10 +29,13 @@ export const apiSlice = createApi({
 					orbital_period: planet.orbital_period,
 					rotation_period: planet.rotation_period,
 					surface_water: planet.surface_water,
+					url: planet.url,
 				}));
 				return {
 					results,
 					count: response.count,
+					next: response.next,
+					previous: response.previous,
 				};
 			},
 		}),

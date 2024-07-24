@@ -1,6 +1,6 @@
 import { PlanetDetails } from '../types/types.ts';
 
-export const downloadCSV = (items: PlanetDetails[], filename: string) => {
+export const downloadCSV = (items: PlanetDetails[]): string => {
 	const csvContent = [
 		[
 			'Name',
@@ -27,10 +27,6 @@ export const downloadCSV = (items: PlanetDetails[], filename: string) => {
 	]
 		.map((e) => e.join(';'))
 		.join('\n');
-
 	const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-	const link = document.createElement('a');
-	link.href = URL.createObjectURL(blob);
-	link.download = filename;
-	link.click();
+	return URL.createObjectURL(blob);
 };

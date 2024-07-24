@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { unselectItem } from '../../store/resultsSlice.ts';
@@ -9,16 +9,22 @@ const Flyout: React.FC = () => {
 	const selectedItems = useSelector((state: RootState) => state.results.selectedItems);
 	const dispatch = useDispatch();
 	const selectedCount = Object.keys(selectedItems).length;
+	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
 	const handleUnselectAll = () => {
 		Object.keys(selectedItems).forEach((name) => dispatch(unselectItem(name)));
-		// dispatch(unselectAllItems());
 	};
 
-	const handleDownload = () => {
-		const itemsArray = Object.values(selectedItems);
-		downloadCSV(itemsArray, `${selectedCount}_planets.csv`);
-	};
+	useEffect(() => {
+		if (selectedCount > 0) {
+			const url = downloadCSV(Object.values(selectedItems));
+			setDownloadUrl(url);
+
+			return () => {
+				URL.revokeObjectURL(url); // Clean up the object URL
+			};
+		}
+	}, [selectedItems, selectedCount]);
 
 	if (selectedCount === 0) {
 		return null;
@@ -28,7 +34,9 @@ const Flyout: React.FC = () => {
 		<div className="flyout">
 			<p>{selectedCount} items are selected</p>
 			<button onClick={handleUnselectAll}>Unselect all</button>
-			<button onClick={handleDownload}>Download</button>
+			<a href={downloadUrl} download={`${selectedCount}_planets.csv`}>
+				Download
+			</a>
 		</div>
 	);
 };

@@ -3,14 +3,14 @@ export interface Planet {
 	terrain: string;
 	population: string;
 	url: string;
-	count: number;
+	id: string;
 }
 
 export interface PlanetAPIResponse {
 	count: number;
 	next: string | null;
 	previous: string | null;
-	results: Planet[];
+	results: PlanetDetails[];
 }
 
 export interface PlanetDetails extends Planet {

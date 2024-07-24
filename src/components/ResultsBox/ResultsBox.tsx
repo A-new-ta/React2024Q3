@@ -11,7 +11,7 @@ import {
 } from '../../store/resultsSlice.ts';
 import { RootState } from '../../store/store';
 import Pagination from '../Pagination/Pagination.tsx';
-import { Planet } from '../../types/types.ts';
+import { PlanetDetails } from '../../types/types.ts';
 
 interface Props {
 	searchTerm: string;
@@ -23,7 +23,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	const [searchParams, setSearchParams] = useSearchParams();
 	const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
 	const dispatch = useDispatch();
-	const { loading, currentPageItems, selectedItems } = useSelector(
+	const { loading, currentPageItems, selectedItems, count } = useSelector(
 		(state: RootState) => state.results
 	);
 	const { data, error, isFetching } = useGetPlanetsQuery({ search: searchTerm, page: currentPage });
@@ -40,7 +40,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	useEffect(() => {
 		dispatch(setLoading(isFetching));
 		if (!isFetching && data) {
-			dispatch(setCurrentPageItems(data.results));
+			dispatch(setCurrentPageItems(data));
 		}
 	}, [isFetching, data, dispatch]);
 	const handlePageChange = (newPage: number) => {
@@ -60,7 +60,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	const handlePaginationClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		e.stopPropagation();
 	};
-	const handleCheckboxChange = (planet: Planet) => {
+	const handleCheckboxChange = (planet: PlanetDetails) => {
 		if (selectedItems[planet.name]) {
 			dispatch(unselectItem(planet.name));
 		} else {
@@ -105,7 +105,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 					<Pagination
 						currentPage={currentPage}
 						onPageChange={handlePageChange}
-						totalPages={Math.ceil(data.count / 10)}
+						totalPages={Math.ceil((count ?? 0) / 10)}
 					/>
 				</div>
 			)}

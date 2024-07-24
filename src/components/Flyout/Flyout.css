@@ -10,14 +10,16 @@
   padding: 10px;
 }
 
-.flyout button {
+.flyout button, a {
   background-color: lightgray;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
   border-radius: 4px;
+  color: black;
 }
 
-.flyout button:hover {
+.flyout button:hover, a:hover {
   background-color: darkgrey;
+  color: black;
 }

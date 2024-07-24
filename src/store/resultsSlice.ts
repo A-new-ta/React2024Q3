@@ -1,16 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Planet, PlanetDetails } from '../types/types.ts';
+import { PlanetAPIResponse, PlanetDetails } from '../types/types.ts';
 
 interface ResultState {
 	loading: boolean;
-	currentPageItems: Planet[];
-	selectedItems: { [key: string]: Planet };
+	currentPageItems: PlanetDetails[];
+	selectedItems: { [key: string]: PlanetDetails };
+	count: number | null;
+	next: string | null;
+	previous: string | null;
 }
 
 const initialState: ResultState = {
 	loading: false,
 	currentPageItems: [],
 	selectedItems: {},
+	count: null,
+	next: null,
+	previous: null,
 };
 
 const resultsSlice = createSlice({
@@ -20,8 +26,11 @@ const resultsSlice = createSlice({
 		setLoading: (state, action: PayloadAction<boolean>) => {
 			state.loading = action.payload;
 		},
-		setCurrentPageItems: (state, action: PayloadAction<Planet[]>) => {
-			state.currentPageItems = action.payload;
+		setCurrentPageItems: (state, action: PayloadAction<PlanetAPIResponse>) => {
+			state.currentPageItems = action.payload.results;
+			state.count = action.payload.count;
+			state.next = action.payload.next;
+			state.previous = action.payload.previous;
 		},
 		selectItem: (state, action: PayloadAction<PlanetDetails>) => {
 			state.selectedItems[action.payload.name] = action.payload;
@@ -30,7 +39,7 @@ const resultsSlice = createSlice({
 			delete state.selectedItems[action.payload];
 		},
 		unselectAllItems: (state) => {
-			state.selectItems = {};
+			state.selectedItems = {};
 		},
 	},
 });
