@@ -9,7 +9,7 @@ import {
 	selectItem,
 	unselectItem,
 } from '../../store/resultsSlice.ts';
-import { RootState } from '../../store/store';
+import { RootState } from '../../store/store.ts';
 import Pagination from '../Pagination/Pagination.tsx';
 import { PlanetDetails } from '../../types/types.ts';
 
@@ -67,7 +67,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 			dispatch(selectItem(planet));
 		}
 	};
-	if (loading) {
+	if (isFetching) {
 		return <div className="loading">Loading...</div>;
 	}
 	if (error) {

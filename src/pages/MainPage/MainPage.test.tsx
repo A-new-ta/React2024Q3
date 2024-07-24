@@ -4,6 +4,8 @@ import MainPage from './MainPage';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import ResultsBox from '../../components/ResultsBox/ResultsBox';
 import '@testing-library/jest-dom';
+import { store } from '../../store/store.ts';
+import { Provider } from 'react-redux';
 
 jest.mock('../../components/SearchBox/SearchBox');
 jest.mock('../../components/ResultsBox/ResultsBox');
@@ -34,9 +36,11 @@ describe('MainPage', () => {
 
 	it('renders SearchBox and ResultsBox components', () => {
 		render(
-			<MemoryRouter initialEntries={['/']}>
-				<MainPage />
-			</MemoryRouter>
+			<Provider store={store}>
+				<MemoryRouter initialEntries={['/']}>
+					<MainPage />
+				</MemoryRouter>
+			</Provider>
 		);
 
 		expect(screen.getByTestId('mock-search-box')).toBeInTheDocument();
@@ -45,9 +49,11 @@ describe('MainPage', () => {
 
 	it('updates search term state on input change', () => {
 		render(
-			<MemoryRouter initialEntries={['/']}>
-				<MainPage />
-			</MemoryRouter>
+			<Provider store={store}>
+				<MemoryRouter initialEntries={['/']}>
+					<MainPage />
+				</MemoryRouter>
+			</Provider>
 		);
 
 		const input = screen.getByTestId('search-input');
@@ -57,9 +63,11 @@ describe('MainPage', () => {
 
 	it('shows details section when an item is clicked', async () => {
 		render(
-			<MemoryRouter initialEntries={['/']}>
-				<MainPage />
-			</MemoryRouter>
+			<Provider store={store}>
+				<MemoryRouter initialEntries={['/']}>
+					<MainPage />
+				</MemoryRouter>
+			</Provider>
 		);
 
 		const resultItem = screen.getByTestId('result-item');

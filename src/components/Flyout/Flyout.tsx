@@ -21,8 +21,10 @@ const Flyout: React.FC = () => {
 			setDownloadUrl(url);
 
 			return () => {
-				URL.revokeObjectURL(url); // Clean up the object URL
+				URL.revokeObjectURL(url);
 			};
+		} else {
+			setDownloadUrl(null);
 		}
 	}, [selectedItems, selectedCount]);
 
@@ -34,9 +36,11 @@ const Flyout: React.FC = () => {
 		<div className="flyout">
 			<p>{selectedCount} items are selected</p>
 			<button onClick={handleUnselectAll}>Unselect all</button>
-			<a href={downloadUrl} download={`${selectedCount}_planets.csv`}>
-				Download
-			</a>
+			{downloadUrl && (
+				<a href={downloadUrl} download={`${selectedCount}_planets.csv`}>
+					Download
+				</a>
+			)}
 		</div>
 	);
 };

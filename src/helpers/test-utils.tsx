@@ -1,23 +1,35 @@
+import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import thunk, { ThunkMiddleware } from 'redux-thunk';
-import type { ReactElement } from 'react';
-import type { Store, AnyAction } from 'redux';
-// import type { ThunkDispatch } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
+import resultsReducer from '../store/resultsSlice.ts';
+import type { RootState } from '../store/store.ts';
 
-const middlewares: Array<ThunkMiddleware<NonNullable<unknown>, AnyAction>> = [
-	thunk as ThunkMiddleware<NonNullable<unknown>, AnyAction>,
-];
-const mockStore = configureMockStore(middlewares);
-
-interface ExtendedRenderOptions {
-	store?: Store;
+type PreloadedState = Partial<RootState>;
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+	preloadedState?: PreloadedState;
+	store?: ReturnType<typeof configureStore>;
 }
 
-export function renderWithStore(
-	ui: ReactElement,
-	{ store = mockStore({}) }: ExtendedRenderOptions = {}
+export function renderWithProviders(
+	ui: React.ReactElement,
+	{
+		preloadedState = {} as PreloadedState,
+		store = configureStore({
+			reducer: {
+				// [apiSlice.reducerPath]: apiSlice.reducer,
+				results: resultsReducer,
+			},
+			// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+			preloadedState,
+		}),
+		...renderOptions
+	}: ExtendedRenderOptions = {}
 ) {
-	return render(<Provider store={store}>{ui}</Provider>);
+	const Wrapper = ({ children }: PropsWithChildren<NonNullable<unknown>>) => (
+		<Provider store={store}>{children}</Provider>
+	);
+
+	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }

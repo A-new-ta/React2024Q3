@@ -47,3 +47,4 @@ const resultsSlice = createSlice({
 export const { setLoading, setCurrentPageItems, selectItem, unselectItem, unselectAllItems } =
 	resultsSlice.actions;
 export default resultsSlice.reducer;
+export type { ResultState };
