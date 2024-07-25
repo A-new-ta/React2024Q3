@@ -4,13 +4,14 @@ import { RootState } from '../../store/store';
 import { unselectItem } from '../../store/resultsSlice.ts';
 import './Flyout.css';
 import { downloadCSV } from '../../helpers/csvHelper';
+import { useTheme } from '../../context/ThemeContext.tsx';
 
 const Flyout: React.FC = () => {
 	const selectedItems = useSelector((state: RootState) => state.results.selectedItems);
 	const dispatch = useDispatch();
 	const selectedCount = Object.keys(selectedItems).length;
 	const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-
+	const { theme } = useTheme();
 	const handleUnselectAll = () => {
 		Object.keys(selectedItems).forEach((name) => dispatch(unselectItem(name)));
 	};
@@ -33,11 +34,17 @@ const Flyout: React.FC = () => {
 	}
 
 	return (
-		<div className="flyout">
+		<div className={`flyout theme-${theme}`}>
 			<p>{selectedCount} items are selected</p>
-			<button onClick={handleUnselectAll}>Unselect all</button>
+			<button className={`theme-${theme}`} onClick={handleUnselectAll}>
+				Unselect all
+			</button>
 			{downloadUrl && (
-				<a href={downloadUrl} download={`${selectedCount}_planets.csv`}>
+				<a
+					className={`theme-${theme}`}
+					href={downloadUrl}
+					download={`${selectedCount}_planets.csv`}
+				>
 					Download
 				</a>
 			)}

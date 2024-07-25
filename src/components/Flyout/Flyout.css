@@ -3,14 +3,13 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #f0f0f0;
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 10px;
 }
 
-.flyout button, a {
+.flyout button, .flyout a {
   background-color: lightgray;
   border: none;
   padding: 10px 15px;
@@ -19,7 +18,32 @@
   color: black;
 }
 
-.flyout button:hover, a:hover {
+/* Light Theme */
+.flyout.theme-light {
+  background-color: #f0f0f0;
+}
+
+.flyout button.theme-light, .flyout a.theme-light {
+  background-color: lightgray;
+  color: black;
+}
+
+.flyout button.theme-light:hover, .flyout a.theme-light:hover {
   background-color: darkgrey;
   color: black;
+}
+
+/* Dark Theme */
+.flyout.theme-dark {
+  background-color: #444
+}
+
+.flyout button.theme-dark, .flyout a.theme-dark {
+  background-color: #555;
+  color: white;
+}
+
+.flyout button.theme-dark:hover, .flyout a.theme-dark:hover {
+  background-color: #777;
+  color: white;
 }

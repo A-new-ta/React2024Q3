@@ -7,6 +7,7 @@ import resultsReducer, { selectItem } from '../../store/resultsSlice';
 import { downloadCSV } from '../../helpers/csvHelper';
 import React from 'react';
 import { PlanetDetails } from '../../types/types.ts';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
 // Mock the downloadCSV function
 jest.mock('../../helpers/csvHelper', () => ({
@@ -27,7 +28,11 @@ const store = configureStore({
 });
 
 const renderWithProviders = (ui: React.ReactElement) => {
-	return render(<Provider store={store}>{ui}</Provider>);
+	return render(
+		<ThemeProvider>
+			<Provider store={store}>{ui}</Provider>
+		</ThemeProvider>
+	);
 };
 
 describe('Flyout Component', () => {
@@ -36,7 +41,11 @@ describe('Flyout Component', () => {
 	});
 
 	it('renders null when no items are selected', () => {
-		renderWithProviders(<Flyout />);
+		renderWithProviders(
+			<ThemeProvider>
+				<Flyout />
+			</ThemeProvider>
+		);
 		expect(screen.queryByText(/items are selected/i)).toBeNull();
 		expect(screen.queryByText(/unselect all/i)).toBeNull();
 		expect(screen.queryByText(/download/i)).toBeNull();
@@ -57,7 +66,11 @@ describe('Flyout Component', () => {
 			id: '1',
 		};
 		store.dispatch(selectItem(mockPlanet));
-		renderWithProviders(<Flyout />);
+		renderWithProviders(
+			<ThemeProvider>
+				<Flyout />
+			</ThemeProvider>
+		);
 
 		screen.debug();
 		expect(screen.getByText(/1 items are selected/i)).toBeInTheDocument();
@@ -94,7 +107,11 @@ describe('Flyout Component', () => {
 		};
 		store.dispatch(selectItem(mockPlanet1));
 		store.dispatch(selectItem(mockPlanet2));
-		renderWithProviders(<Flyout />);
+		renderWithProviders(
+			<ThemeProvider>
+				<Flyout />
+			</ThemeProvider>
+		);
 
 		const unselectButton = screen.getByText(/unselect all/i);
 		fireEvent.click(unselectButton);
@@ -119,7 +136,11 @@ describe('Flyout Component', () => {
 			id: '1',
 		};
 		store.dispatch(selectItem(mockPlanet));
-		renderWithProviders(<Flyout />);
+		renderWithProviders(
+			<ThemeProvider>
+				<Flyout />
+			</ThemeProvider>
+		);
 
 		await waitFor(() => {
 			expect(downloadCSV).toHaveBeenCalledWith([mockPlanet]);

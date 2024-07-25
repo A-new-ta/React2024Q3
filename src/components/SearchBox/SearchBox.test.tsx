@@ -1,6 +1,7 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SearchBox from './SearchBox';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
 describe('SearchBox', () => {
 	const defaultProps = {
@@ -9,7 +10,11 @@ describe('SearchBox', () => {
 	};
 
 	const renderComponent = (props = {}) => {
-		return render(<SearchBox {...defaultProps} {...props} />);
+		return render(
+			<ThemeProvider>
+				<SearchBox {...defaultProps} {...props} />
+			</ThemeProvider>
+		);
 	};
 
 	it('should update the input field when typed into', () => {
@@ -37,7 +42,11 @@ describe('SearchBox', () => {
 		const input = screen.getByPlaceholderText('Search...') as HTMLInputElement;
 		expect(input.value).toBe('initial term');
 
-		rerender(<SearchBox {...defaultProps} searchTerm="updated term" />);
+		rerender(
+			<ThemeProvider>
+				<SearchBox {...defaultProps} searchTerm="updated term" />
+			</ThemeProvider>
+		);
 		expect(input.value).toBe('updated term');
 	});
 });

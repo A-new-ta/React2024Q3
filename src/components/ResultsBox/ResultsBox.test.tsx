@@ -4,6 +4,7 @@ import ResultsBox from './ResultsBox.tsx';
 import { useGetPlanetsQuery } from '../../store/apiSlice.ts';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
 // Mock the hook
 jest.mock('../../store/apiSlice.ts');
@@ -54,9 +55,11 @@ describe('ResultsBox Component', () => {
 	test('renders loading state', () => {
 		const history = createMemoryHistory();
 		renderWithProviders(
-			<Router location={history.location} navigator={history}>
-				<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-			</Router>,
+			<ThemeProvider>
+				<Router location={history.location} navigator={history}>
+					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
+				</Router>
+			</ThemeProvider>,
 			{
 				preloadedState: {
 					results: {
@@ -82,9 +85,11 @@ describe('ResultsBox Component', () => {
 
 		const history = createMemoryHistory();
 		renderWithProviders(
-			<Router location={history.location} navigator={history}>
-				<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-			</Router>,
+			<ThemeProvider>
+				<Router location={history.location} navigator={history}>
+					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
+				</Router>
+			</ThemeProvider>,
 			{
 				preloadedState: {
 					results: {
@@ -112,9 +117,11 @@ describe('ResultsBox Component', () => {
 
 		const history = createMemoryHistory();
 		renderWithProviders(
-			<Router location={history.location} navigator={history}>
-				<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-			</Router>,
+			<ThemeProvider>
+				<Router location={history.location} navigator={history}>
+					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
+				</Router>
+			</ThemeProvider>,
 			{
 				preloadedState: {
 					results: {
@@ -141,9 +148,11 @@ describe('ResultsBox Component', () => {
 
 		const history = createMemoryHistory();
 		renderWithProviders(
-			<Router location={history.location} navigator={history}>
-				<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-			</Router>,
+			<ThemeProvider>
+				<Router location={history.location} navigator={history}>
+					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
+				</Router>
+			</ThemeProvider>,
 			{
 				preloadedState: {
 					results: {

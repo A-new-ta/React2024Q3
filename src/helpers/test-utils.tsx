@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import resultsReducer from '../store/resultsSlice.ts';
 import type { RootState } from '../store/store.ts';
+import planetDetailsReducer from '../store/planetDetailsSlice.ts';
 
 type PreloadedState = Partial<RootState>;
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
@@ -20,6 +21,7 @@ export function renderWithProviders(
 			reducer: {
 				// [apiSlice.reducerPath]: apiSlice.reducer,
 				results: resultsReducer,
+				planetDetails: planetDetailsReducer,
 			},
 			// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 			preloadedState,

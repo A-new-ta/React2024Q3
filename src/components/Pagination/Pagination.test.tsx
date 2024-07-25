@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Pagination from './Pagination';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
 describe('Pagination', () => {
 	const onPageChange = jest.fn();
@@ -12,7 +13,11 @@ describe('Pagination', () => {
 	};
 
 	const renderComponent = (props = {}) => {
-		return render(<Pagination {...defaultProps} {...props} />);
+		return render(
+			<ThemeProvider>
+				<Pagination {...defaultProps} {...props} />
+			</ThemeProvider>
+		);
 	};
 
 	it('renders the correct number of pages', () => {

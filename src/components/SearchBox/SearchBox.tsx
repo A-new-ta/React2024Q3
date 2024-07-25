@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './SearchBox.css';
+import { useTheme } from '../../context/ThemeContext.tsx';
 
 interface Props {
 	searchTerm: string;
@@ -8,6 +9,7 @@ interface Props {
 
 const SearchBox: React.FC<Props> = ({ searchTerm, onSearch }) => {
 	const [term, setTerm] = useState(searchTerm);
+	const { theme } = useTheme();
 	useEffect(() => {
 		setTerm(searchTerm);
 	}, [searchTerm]);
@@ -20,16 +22,16 @@ const SearchBox: React.FC<Props> = ({ searchTerm, onSearch }) => {
 	};
 
 	return (
-		<div className="search-component">
+		<div className={`search-component theme-${theme}`}>
 			<input
-				className="search-input"
+				className={`search-input theme-${theme}`}
 				type="text"
 				placeholder="Search..."
 				autoFocus
 				value={term}
 				onChange={handleInputChange}
 			/>
-			<button onClick={handleSearch} className="search-button">
+			<button onClick={handleSearch} className={`search-button theme-${theme}`}>
 				Search
 			</button>
 		</div>

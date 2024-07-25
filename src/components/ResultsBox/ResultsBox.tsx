@@ -12,6 +12,7 @@ import {
 import { RootState } from '../../store/store.ts';
 import Pagination from '../Pagination/Pagination.tsx';
 import { PlanetDetails } from '../../types/types.ts';
+import { useTheme } from '../../context/ThemeContext.tsx';
 
 interface Props {
 	searchTerm: string;
@@ -28,6 +29,7 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	);
 	const { data, error, isFetching } = useGetPlanetsQuery({ search: searchTerm, page: currentPage });
 	const previousSearchTerm = useRef<string>(searchTerm);
+	const { theme } = useTheme();
 
 	useEffect(() => {
 		if (previousSearchTerm.current !== searchTerm) {
@@ -75,15 +77,15 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 	}
 
 	return (
-		<div className="results" onClick={handleContainerClick}>
-			<div className="results__block">
+		<div className={`results theme-${theme}`} onClick={handleContainerClick}>
+			<div className={`results__block theme-${theme}`}>
 				{currentPageItems.length === 0 && !loading ? (
 					<div className="no-results">Nothing found</div>
 				) : (
 					currentPageItems.map((result, index) => (
 						<div
 							key={index}
-							className="card"
+							className={`card theme-${theme}`}
 							role="article"
 							onClick={(e) => handleCardClick(result.id, e)}
 						>

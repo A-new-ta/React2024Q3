@@ -8,7 +8,6 @@
 	padding: 20px;
 }
 .card {
-	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
@@ -27,4 +26,26 @@
 }
 .loading {
 	margin-top: 20px;
+}
+
+/* Light Theme Styles */
+.results.theme-light .card {
+  background-color: #fff;
+  color: #333;
+}
+
+.results.theme-light .card input {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+/* Dark Theme Styles */
+.results.theme-dark .card {
+  background-color: #555;
+  color: #fff;
+}
+
+.results.theme-dark .card input {
+  background-color: #555;
+  border: 1px solid #666;
 }

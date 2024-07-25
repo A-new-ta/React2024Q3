@@ -1,11 +1,11 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DetailsCard from './DetailsCard';
-// import { getPlanetDetails } from '../../services/api';
 import { BrowserRouter } from 'react-router-dom';
 import { PlanetDetails } from '../../types/types.ts';
 import { act } from 'react';
 import { useGetPlanetDetailsQuery } from '../../store/apiSlice.ts';
+import { renderWithProviders } from '../../helpers/test-utils.tsx';
 
 jest.mock('../../store/apiSlice.ts');
 jest.mock('react-router-dom', () => ({
@@ -35,7 +35,7 @@ describe('DetailsCard', () => {
 			status: 'pending',
 		});
 		await act(async () => {
-			render(
+			renderWithProviders(
 				<BrowserRouter>
 					<DetailsCard />
 				</BrowserRouter>
@@ -77,7 +77,7 @@ describe('DetailsCard', () => {
 		});
 
 		await act(async () => {
-			render(
+			renderWithProviders(
 				<BrowserRouter>
 					<DetailsCard />
 				</BrowserRouter>
@@ -114,7 +114,7 @@ describe('DetailsCard', () => {
 		});
 
 		await act(async () => {
-			render(
+			renderWithProviders(
 				<BrowserRouter>
 					<DetailsCard />
 				</BrowserRouter>
@@ -155,7 +155,7 @@ describe('DetailsCard', () => {
 			status: 'fulfilled',
 		});
 		await act(async () => {
-			render(
+			renderWithProviders(
 				<BrowserRouter>
 					<DetailsCard />
 				</BrowserRouter>
