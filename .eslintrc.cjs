@@ -7,8 +7,9 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
+    'plugin:@next/next/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'next.config.mjs'],
   plugins: ['react-compiler', '@typescript-eslint', 'prettier', 'react', 'react-hooks'],
   rules: {
     'react-compiler/react-compiler': 'error',
