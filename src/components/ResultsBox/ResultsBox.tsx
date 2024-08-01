@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import './ResultsBox.css';
+import styles from './ResultsBox.module.css';
 import { useGetPlanetsQuery } from '../../store/apiSlice.ts';
 import {
 	setLoading,
@@ -21,23 +21,27 @@ interface Props {
 }
 
 const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }) => {
-	const [searchParams, setSearchParams] = useSearchParams();
-	const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : 1;
+	const router = useRouter();
+	const { query, push } = router;
+	const currentPage = parseInt((query.page as string) || '1', 10);
 	const dispatch = useDispatch();
 	const { loading, currentPageItems, selectedItems, count } = useSelector(
 		(state: RootState) => state.results
 	);
-	const { data, error, isFetching } = useGetPlanetsQuery({ search: searchTerm, page: currentPage });
+	const { data, error, isFetching } = useGetPlanetsQuery({
+		search: searchTerm,
+		page: currentPage,
+	});
 	const previousSearchTerm = useRef<string>(searchTerm);
 	const { theme } = useTheme();
 
 	useEffect(() => {
 		if (previousSearchTerm.current !== searchTerm) {
 			onCloseDetails();
-			setSearchParams({ search: searchTerm, page: '1' });
+			push({ pathname: '/', query: { search: searchTerm, page: '1' } });
 			previousSearchTerm.current = searchTerm;
 		}
-	}, [searchTerm, setSearchParams, onCloseDetails]);
+	}, [searchTerm, push, onCloseDetails]);
 
 	useEffect(() => {
 		dispatch(setLoading(isFetching));
@@ -46,9 +50,8 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 		}
 	}, [isFetching, data, dispatch]);
 	const handlePageChange = (newPage: number) => {
-		searchParams.delete('details');
 		onCloseDetails();
-		setSearchParams({ search: searchTerm, page: newPage.toString() });
+		push({ pathname: '/', query: { search: searchTerm, page: newPage.toString() } });
 	};
 
 	const handleContainerClick = () => {
@@ -70,22 +73,22 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 		}
 	};
 	if (isFetching) {
-		return <div className="loading">Loading...</div>;
+		return <div className={styles.loading}>Loading...</div>;
 	}
 	if (error) {
-		return <div className="error">Error loading data</div>;
+		return <div>Error loading data</div>;
 	}
 
 	return (
-		<div className={`results theme-${theme}`} onClick={handleContainerClick}>
-			<div className={`results__block theme-${theme}`}>
+		<div className={`${styles.results} theme-${theme}`} onClick={handleContainerClick}>
+			<div className={`${styles.results__block} theme-${theme}`}>
 				{currentPageItems.length === 0 && !loading ? (
-					<div className="no-results">Nothing found</div>
+					<div>Nothing found</div>
 				) : (
 					currentPageItems.map((result, index) => (
 						<div
 							key={index}
-							className={`card theme-${theme}`}
+							className={`${styles.card} theme-${theme}`}
 							role="article"
 							onClick={(e) => handleCardClick(result.id, e)}
 						>
@@ -103,9 +106,9 @@ const ResultsBox: React.FC<Props> = ({ searchTerm, onItemClick, onCloseDetails }
 				)}
 			</div>
 			{currentPageItems.length > 0 && (
-				<div className="pagination" onClick={handlePaginationClick}>
+				<div onClick={handlePaginationClick}>
 					<Pagination
-						currentPage={currentPage}
+						currentPage={Number(router.query.page) || 1}
 						onPageChange={handlePageChange}
 						totalPages={Math.ceil((count ?? 0) / 10)}
 					/>

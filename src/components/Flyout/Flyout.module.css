@@ -1,0 +1,54 @@
+/* Base Styles */
+.flyout {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.button,
+.link {
+  background-color: var(--flyout-button-bg, lightgray);
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--flyout-button-color, black);
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.button:hover,
+.link:hover {
+  background-color: var(--flyout-button-hover-bg, darkgrey);
+}
+
+/* Light Theme */
+.themeLight {
+  background-color: #f0f0f0;
+}
+
+.themeLight .button,
+.themeLight .link {
+  --flyout-button-bg: lightgray;
+  --flyout-button-color: black;
+  --flyout-button-hover-bg: darkgrey;
+}
+
+/* Dark Theme */
+.themeDark {
+  background-color: #444;
+}
+
+.themeDark .button,
+.themeDark .link {
+  --flyout-button-bg: #555;
+  --flyout-button-color: white;
+  --flyout-button-hover-bg: #777;
+}

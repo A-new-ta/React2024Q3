@@ -8,7 +8,7 @@
   padding: 20px;
 }
 
-.page-title {
+.pageTitle {
   font-size: 4rem;
   margin-bottom: 20px;
 }
@@ -18,21 +18,21 @@
 }
 
 /* Light Theme Styles */
-.page.theme-light {
+.themeLight {
   background-color: #f0f0f0;
   color: #333;
 }
 
-.page.theme-light .page-title {
+.themeLight .pageTitle {
   color: #007bff;
 }
 
 /* Dark Theme Styles */
-.page.theme-dark {
+.themeDark {
   background-color: #333;
   color: #fff;
 }
 
-.page.theme-dark .page-title {
+.themeDark .pageTitle {
   color: #ff5722;
 }

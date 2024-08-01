@@ -1,71 +1,80 @@
-.top-section {
+.topSection {
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.main-page {
+.mainPage {
   display: flex;
   flex-direction: row;
   height: 100vh;
 }
 
-.left-section {
+.leftSection {
   width: 100%;
   transition: width 0.3s;
 }
 
-.left-section.shrink {
+.leftSectionShrink {
   width: 70%;
 }
 
-.right-section {
+.rightSection {
   width: 30%;
   padding: 20px;
   border-left: 1px solid #ddd;
   position: relative;
 }
-.bottom-section {
+
+.bottomSection {
   height: 90%;
   display: flex;
 }
-
-.close-button {
+.rightSection button {
   position: absolute;
   top: 10px;
   right: 10px;
   background: none;
   border: none;
   font-size: 20px;
-  cursor: pointer;
+  cursor: pointer
+}
+.rightSection button:focus {
+  outline: none;
 }
 
 /* Light Theme */
-.main-page.theme-light {
+.mainPageThemeLight {
   background-color: #ffffff;
   color: #000000;
 }
 
-.top-section.theme-light {
+.topSectionThemeLight {
   background-color: #f0f0f0;
 }
 
-.right-section.theme-light {
+.rightSectionThemeLight {
   background-color: #f0f0f0;
   border-left-color: #ddd;
 }
+.rightSectionThemeLight button {
+  color: #000000;
+}
 
 /* Dark Theme */
-.main-page.theme-dark {
+.mainPageThemeDark {
   background-color: #333333;
   color: #ffffff;
 }
 
-.top-section.theme-dark {
+.topSectionThemeDark {
   background-color: #444444;
 }
 
-.right-section.theme-dark {
+.rightSectionThemeDark {
   background-color: #444444;
   border-left-color: #555555;
+}
+.rightSectionThemeDark button {
+  color: #ffffff;
 }

@@ -1,8 +1,8 @@
-.search-component {
+.searchComponent  {
 	display: flex;
 	gap: 10px;
 }
-.search-button {
+.searchButton  {
 	border: none;
 	color: black;
 	padding: 10px 20px;
@@ -13,10 +13,10 @@
 	cursor: pointer;
 	border-radius: 4px;
 }
-.search-button:hover {
+.searchButton:hover {
 	background-color: darkgrey;
 }
-.search-input {
+.searchInput  {
 	padding: 10px;
 	font-size: 16px;
 	border-radius: 4px;
@@ -25,32 +25,32 @@
 }
 
 /* Light Theme */
-.search-input.theme-light {
+.theme-light .searchInput {
   background-color: white;
   color: black;
   border-color: #ccc;
 }
 
-.search-button.theme-light {
+.theme-light .searchButton {
   background-color: lightgray;
   color: black;
 }
-.search-button.theme-light:hover {
+.theme-light .searchButton:hover {
   background-color: darkgrey;
 }
 
 /* Dark Theme */
-.search-input.theme-dark {
+.theme-dark .searchInput {
   background-color: #444;
   color: white;
   border-color: #666;
 }
 
-.search-button.theme-dark {
+.theme-dark .searchButton {
   background-color: #555;
   color: white;
 }
 
-.search-button.theme-dark:hover {
+.theme-dark .searchButton:hover {
   background-color: #777;
 }

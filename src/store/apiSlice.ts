@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../constants/appConstants.ts';
 import { PlanetAPIResponse, PlanetDetails } from '../types/types.ts';
 
+const BASE_URL = 'https://swapi.dev/api/';
 interface GetPlanetsQueryArgs {
 	search: string;
 	page: number;

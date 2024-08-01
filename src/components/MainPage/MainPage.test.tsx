@@ -1,15 +1,15 @@
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import MainPage from './MainPage';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import ResultsBox from '../../components/ResultsBox/ResultsBox';
+import MainPage from './MainPage.tsx';
+import SearchBox from '../SearchBox/SearchBox.tsx';
+import ResultsBox from '../ResultsBox/ResultsBox.tsx';
 import '@testing-library/jest-dom';
 import { store } from '../../store/store.ts';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
-jest.mock('../../components/SearchBox/SearchBox');
-jest.mock('../../components/ResultsBox/ResultsBox');
+jest.mock('../SearchBox/SearchBox.tsx');
+jest.mock('../ResultsBox/ResultsBox.tsx');
 
 const mockSearchBox = SearchBox as jest.MockedFunction<typeof SearchBox>;
 const mockResultsBox = ResultsBox as jest.MockedFunction<typeof ResultsBox>;

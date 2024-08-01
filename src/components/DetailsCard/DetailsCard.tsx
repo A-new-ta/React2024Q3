@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useGetPlanetDetailsQuery } from '../../store/apiSlice';
-import './DetailsCard.css';
 import { RootState } from '../../store/store.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPlanetDetails } from '../../store/planetDetailsSlice.ts';
 
-interface ContextType {
-	handleCloseDetails: () => void;
+interface DetailsCardProps {
+	id: string;
 }
-
-const DetailsCard: React.FC = () => {
-	const { id } = useParams<{ id: string }>();
-	const { handleCloseDetails } = useOutletContext<ContextType>();
+const DetailsCard: React.FC<DetailsCardProps> = ({ id }) => {
+	const router = useRouter();
 	const dispatch = useDispatch();
-	const { data, error, isLoading } = useGetPlanetDetailsQuery(id!);
+	const { data, error, isLoading } = useGetPlanetDetailsQuery(id);
 	const planetDetails = useSelector((state: RootState) => state.planetDetails.details);
 
 	useEffect(() => {
@@ -23,17 +20,15 @@ const DetailsCard: React.FC = () => {
 		}
 	}, [data, dispatch]);
 	if (isLoading) {
-		return <div className="loading">Loading...</div>;
+		return <div>Loading...</div>;
 	}
 	if (error) {
-		return <div className="error">Error loading planet details</div>;
+		return <div>Error loading planet details</div>;
 	}
 
 	return (
-		<div className="planet-details">
-			<button onClick={handleCloseDetails} className="close-button">
-				Close
-			</button>
+		<div>
+			<button onClick={() => router.push('/')}>Close</button>
 			{planetDetails && (
 				<div>
 					<h2>{planetDetails.name}</h2>

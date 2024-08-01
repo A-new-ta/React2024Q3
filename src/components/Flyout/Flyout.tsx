@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { unselectItem } from '../../store/resultsSlice.ts';
-import './Flyout.css';
+import styles from './Flyout.module.css';
 import { downloadCSV } from '../../helpers/csvHelper';
 import { useTheme } from '../../context/ThemeContext.tsx';
 
@@ -34,14 +34,14 @@ const Flyout: React.FC = () => {
 	}
 
 	return (
-		<div className={`flyout theme-${theme}`}>
+		<div className={`${styles.flyout} ${theme === 'dark' ? styles.themeDark : styles.themeLight}`}>
 			<p>{selectedCount} items are selected</p>
-			<button className={`theme-${theme}`} onClick={handleUnselectAll}>
+			<button className={`${styles.button}`} onClick={handleUnselectAll}>
 				Unselect all
 			</button>
 			{downloadUrl && (
 				<a
-					className={`theme-${theme}`}
+					className={`${styles.link}`}
 					href={downloadUrl}
 					download={`${selectedCount}_planets.csv`}
 				>
