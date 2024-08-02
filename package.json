@@ -31,6 +31,9 @@
 		"redux-thunk": "^3.1.0"
 	},
 	"devDependencies": {
+        "@babel/preset-env": "^7.24.8",
+        "@babel/preset-react": "^7.24.7",
+        "@babel/preset-typescript": "^7.24.7",
 		"@eslint/js": "^9.6.0",
 		"@next/eslint-plugin-next": "^14.2.5",
 		"@testing-library/jest-dom": "^6.4.8",
@@ -60,7 +63,7 @@
 		"msw": "^2.3.4",
 		"next-redux-wrapper": "^8.1.0",
 		"prettier": "^3.3.2",
-		"ts-jest": "^29.2.2",
+		"ts-jest": "^29.2.4",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.2.2",
 		"typescript-eslint": "^7.15.0"

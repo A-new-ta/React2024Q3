@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.36% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/19</span>
+                <span class='fraction'>18/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.75% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/16</span>
+                <span class='fraction'>16/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -98,7 +98,10 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,30 +113,31 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">56x</span>
-<span class="cline-any cline-yes">56x</span>
-<span class="cline-any cline-yes">56x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use client';
+&nbsp;
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 &nbsp;
 type Theme = 'light' | 'dark';
 &nbsp;
@@ -144,29 +148,28 @@ interface ThemeContextProps {
 &nbsp;
 const ThemeContext = createContext&lt;ThemeContextProps | undefined&gt;(undefined);
 &nbsp;
-export const useTheme = () =&gt; {
-	const context = useContext(ThemeContext);
-	if (!context) {
-		throw new Error('useTheme must be used within a ThemeProvider');
-	}
-<span class="cstat-no" title="statement not covered" >	return context;</span>
-};
-interface ThemeProviderProps {
-	children: ReactNode;
-}
-&nbsp;
-export const ThemeProvider = <span class="fstat-no" title="function not covered" >({</span> children }: ThemeProviderProps) =&gt; {
-	const [theme, setTheme] = <span class="cstat-no" title="statement not covered" >useState&lt;Theme&gt;(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-		const storedTheme = <span class="cstat-no" title="statement not covered" >localStorage.getItem('theme') as Theme;</span>
-<span class="cstat-no" title="statement not covered" >		return storedTheme || 'light';</span>
-	});
-<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		localStorage.setItem('theme', theme);</span>
+export const ThemeProvider: React.FC&lt;{ children: ReactNode }&gt; = ({ children }) =&gt; {
+	const [theme, setTheme] = useState&lt;Theme&gt;('light');
+	useEffect(() =&gt; {
+		const storedTheme = localStorage.getItem('theme') as Theme;
+		setTheme(storedTheme || 'light');
+	}, []);
+	useEffect(() =&gt; {
+		localStorage.setItem('theme', theme);
+		document.body.className = theme;
 	}, [theme]);
-	const toggleTheme = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		setTheme(<span class="fstat-no" title="function not covered" >(p</span>revTheme) =&gt; (<span class="cstat-no" title="statement not covered" >prevTheme === 'light' ? 'dark' : 'light')</span>);</span>
+	const toggleTheme = <span class="fstat-no" title="function not covered" >() =&gt; </span>{
+<span class="cstat-no" title="statement not covered" >		setTheme((<span class="fstat-no" title="function not covered" >prevTheme)</span> =&gt; (<span class="cstat-no" title="statement not covered" >prevTheme === 'light' ? 'dark' : 'light'))</span>;</span>
 	};
-<span class="cstat-no" title="statement not covered" >	return &lt;ThemeContext.Provider value={{ theme, toggleTheme }}&gt;{children}&lt;/ThemeContext.Provider&gt;;</span>
+	return &lt;ThemeContext.Provider value={{ theme, toggleTheme }}&gt;{children}&lt;/ThemeContext.Provider&gt;;
+};
+&nbsp;
+export const useTheme = (): ThemeContextProps =&gt; {
+	const context = useContext(ThemeContext);
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (!context) {
+<span class="cstat-no" title="statement not covered" >		throw new Error('useTheme must be used within a ThemeProvider');</span>
+	}
+	return context;
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -175,7 +178,7 @@ export const ThemeProvider = <span class="fstat-no" title="function not covered"
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-25T15:00:00.808Z
+                at 2024-08-02T13:05:33.596Z
             </div>
         <script src="../prettify.js"></script>
         <script>

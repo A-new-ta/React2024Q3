@@ -14,8 +14,8 @@ interface Props {
 	onItemClick: (itemId: string) => void;
 	onCloseDetails: () => void;
 	initialPlanets?: PlanetAPIResponse;
-	initialPage: number;
-	onPageChange: (newPage: number) => void;
+	initialPage?: number;
+	onPageChange?: (newPage: number) => void;
 }
 
 const ResultsBox: React.FC<Props> = ({

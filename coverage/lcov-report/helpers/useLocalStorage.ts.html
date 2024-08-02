@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for helpers/test-utils.tsx</title>
+    <title>Code coverage report for helpers/useLocalStorage.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">helpers</a> test-utils.tsx</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">helpers</a> useLocalStorage.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
                 <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/3</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -88,20 +88,18 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -111,69 +109,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { PropsWithChildren } from 'react';
-<span class="cstat-no" title="statement not covered" >import { render } from '@testing-library/react';</span>
-import type { RenderOptions } from '@testing-library/react';
-<span class="cstat-no" title="statement not covered" >import { Provider } from 'react-redux';</span>
-<span class="cstat-no" title="statement not covered" >import { configureStore } from '@reduxjs/toolkit';</span>
-<span class="cstat-no" title="statement not covered" >import resultsReducer from '../store/resultsSlice.ts';</span>
-import type { RootState } from '../store/store.ts';
-<span class="cstat-no" title="statement not covered" >import planetDetailsReducer from '../store/planetDetailsSlice.ts';</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useState, useEffect } from 'react';</span>
 &nbsp;
-type PreloadedState = Partial&lt;RootState&gt;;
-interface ExtendedRenderOptions extends Omit&lt;RenderOptions, 'queries'&gt; {
-	preloadedState?: PreloadedState;
-	store?: ReturnType&lt;typeof configureStore&gt;;
-}
+const useLocalStorage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey: string, initialValue: string) =&gt; {</span>
+	const [storedValue, setStoredValue] = <span class="cstat-no" title="statement not covered" >useState(<span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >		try {</span>
+			const item = <span class="cstat-no" title="statement not covered" >window.localStorage.getItem(key);</span>
+<span class="cstat-no" title="statement not covered" >			return item ? item : initialValue;</span>
+		} catch (error) {
+<span class="cstat-no" title="statement not covered" >			console.error(error);</span>
+<span class="cstat-no" title="statement not covered" >			return initialValue;</span>
+		}
+	});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >r</span>enderWithProviders(</span>
-	ui: React.ReactElement,
-	{
-		preloadedState = <span class="branch-0 cbranch-no" title="branch not covered" >{} as PreloadedState,</span>
-		store = <span class="branch-0 cbranch-no" title="branch not covered" >configureStore({</span>
-			reducer: {
-				// [apiSlice.reducerPath]: apiSlice.reducer,
-				results: resultsReducer,
-				planetDetails: planetDetailsReducer,
-			},
-			// middleware: (getDefaultMiddleware) =&gt; getDefaultMiddleware().concat(apiSlice.middleware),
-			preloadedState,
-		}),
-		...renderOptions<span class="cstat-no" title="statement not covered" ></span>
-	}: ExtendedRenderOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
-) {
-	const Wrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> children }: PropsWithChildren&lt;NonNullable&lt;unknown&gt;&gt;) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >		&lt;Provider store={store}&gt;{children}&lt;/Provider&gt;</span>
-	);
+<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >		try {</span>
+<span class="cstat-no" title="statement not covered" >			window.localStorage.setItem(key, storedValue);</span>
+		} catch (error) {
+<span class="cstat-no" title="statement not covered" >			console.error(error);</span>
+		}
+	}, [key, storedValue]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };</span>
-}
+<span class="cstat-no" title="statement not covered" >	return [storedValue, setStoredValue] as const;</span>
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export default useLocalStorage;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

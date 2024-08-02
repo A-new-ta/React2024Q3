@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.85% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/27</span>
+                <span class='fraction'>27/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/25</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -127,33 +127,33 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">32x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,7 +177,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { unselectItem } from '../../store/resultsSlice.ts';
-import './Flyout.css';
+import styles from './Flyout.module.css';
 import { downloadCSV } from '../../helpers/csvHelper';
 import { useTheme } from '../../context/ThemeContext.tsx';
 &nbsp;
@@ -187,36 +187,36 @@ const Flyout: React.FC = () =&gt; {
 	const selectedCount = Object.keys(selectedItems).length;
 	const [downloadUrl, setDownloadUrl] = useState&lt;string | null&gt;(null);
 	const { theme } = useTheme();
-	const handleUnselectAll = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		Object.keys(selectedItems).forEach(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >dispatch(unselectItem(name)))</span>;</span>
+	const handleUnselectAll = () =&gt; {
+		Object.keys(selectedItems).forEach((name) =&gt; dispatch(unselectItem(name)));
 	};
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		if (selectedCount &gt; 0) {</span>
-			const url = <span class="cstat-no" title="statement not covered" >downloadCSV(Object.values(selectedItems));</span>
-<span class="cstat-no" title="statement not covered" >			setDownloadUrl(url);</span>
+	useEffect(() =&gt; {
+		if (selectedCount &gt; 0) {
+			const url = downloadCSV(Object.values(selectedItems));
+			setDownloadUrl(url);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >			return <span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >				URL.revokeObjectURL(url);</span>
+			return () =&gt; {
+				URL.revokeObjectURL(url);
 			};
 		} else {
-<span class="cstat-no" title="statement not covered" >			setDownloadUrl(null);</span>
+			setDownloadUrl(null);
 		}
 	}, [selectedItems, selectedCount]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	<span class="missing-if-branch" title="if path not taken" >I</span>if (selectedCount === 0) {</span>
-<span class="cstat-no" title="statement not covered" >		return null;</span>
+	if (selectedCount === 0) {
+		return null;
 	}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return (</span>
-		&lt;div className={`flyout theme-${theme}`}&gt;
+	return (
+		&lt;div className={`${styles.flyout} ${theme === 'dark' ? <span class="branch-0 cbranch-no" title="branch not covered" >styles.themeDark </span>: styles.themeLight}`}&gt;
 			&lt;p&gt;{selectedCount} items are selected&lt;/p&gt;
-			&lt;button className={`theme-${theme}`} onClick={handleUnselectAll}&gt;
+			&lt;button className={`${styles.button}`} onClick={handleUnselectAll}&gt;
 				Unselect all
 			&lt;/button&gt;
 			{downloadUrl &amp;&amp; (
 				&lt;a
-					className={`theme-${theme}`}
+					className={`${styles.link}`}
 					href={downloadUrl}
 					download={`${selectedCount}_planets.csv`}
 				&gt;
@@ -235,7 +235,7 @@ export default Flyout;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-25T15:00:00.808Z
+                at 2024-08-02T13:05:33.596Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
