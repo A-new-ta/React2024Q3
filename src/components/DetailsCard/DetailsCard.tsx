@@ -1,28 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import { useGetPlanetDetailsQuery } from '../../store/apiSlice';
 import { RootState } from '../../store/store.ts';
-import { useDispatch, useSelector } from 'react-redux';
-import { setPlanetDetails } from '../../store/planetDetailsSlice.ts';
+import { useSelector } from 'react-redux';
+import useLoadingOnRouteChange from '../../helpers/useLoadingOnRouteChange.ts';
 
-interface DetailsCardProps {
-	id: string;
-}
-const DetailsCard: React.FC<DetailsCardProps> = ({ id }) => {
+const DetailsCard: React.FC = () => {
 	const router = useRouter();
-	const dispatch = useDispatch();
-	const { data, error, isLoading } = useGetPlanetDetailsQuery(id);
 	const planetDetails = useSelector((state: RootState) => state.planetDetails.details);
+	const loading = useLoadingOnRouteChange();
 
-	useEffect(() => {
-		if (data) {
-			dispatch(setPlanetDetails(data));
-		}
-	}, [data, dispatch]);
-	if (isLoading) {
+	if (loading) {
 		return <div>Loading...</div>;
 	}
-	if (error) {
+
+	if (!planetDetails) {
 		return <div>Error loading planet details</div>;
 	}
 
