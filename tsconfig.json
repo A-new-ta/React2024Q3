@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "lib": [
       "ES2020",
-      "DOM",
+      "DOM"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -12,39 +12,40 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "baseUrl": ".",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-//    "incremental": true,
-//    "composite": true,
-//    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-//    "useDefineForClassFields": true,
-//    "noImplicitAny": true,
-//    "noUnusedLocals": true,
-//    "noUnusedParameters": true,
-//    "noFallthroughCasesInSwitch": true,
+    //    "incremental": true,
+    //    "composite": true,
+    //    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    //    "useDefineForClassFields": true,
+    //    "noImplicitAny": true,
+    //    "noUnusedLocals": true,
+    //    "noUnusedParameters": true,
+    //    "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
       "@testing-library/jest-dom"
     ],
-//    "skipDefaultLibCheck": true,
-//    "plugins": [
-//      {
-//        "name": "next"
-//      }
-//    ]
+    "incremental": true
+    //    "skipDefaultLibCheck": true,
+    //    "plugins": [
+    //      {
+    //        "name": "next"
+    //      }
+    //    ]
   },
   "include": [
     "src",
     "jest.config.ts",
-//    "./dist/types/**/*.ts",
+    //    "./dist/types/**/*.ts",
     "./next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-//    ".next/types/**/*.ts"
+    "**/*.tsx"
+    //    ".next/types/**/*.ts"
   ],
   "exclude": [
     "./node_modules"

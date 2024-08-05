@@ -11,7 +11,7 @@ export default {
 		'!./src/helpers/test-utils.tsx',
 	],
 	transform: {
-		'^.+\\.tsx?$': ['ts-jest', { babelConfig: true }],
+		'^.+\\.tsx?$': 'babel-jest',
 	},
 	transformIgnorePatterns: ['<rootDir>/node_modules/'],
 	moduleNameMapper: {
