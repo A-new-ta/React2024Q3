@@ -6,10 +6,9 @@ export default {
 		'!./src/pages/_app.tsx',
 		'!./src/pages/index.tsx',
 		'!./src/pages/_document.tsx',
-		'!./src/store/store.ts',
+		'!./src/pages/details/[id].tsx',
 		'!./src/store/apiSlice.ts',
-		'!./src/store/planetDetailsSlice.ts',
-		'!./src/store/resultsSlice.ts',
+		'!./src/helpers/test-utils.tsx',
 	],
 	transform: {
 		'^.+\\.tsx?$': ['ts-jest', { babelConfig: true }],

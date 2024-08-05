@@ -1,5 +1,4 @@
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-// import { MemoryRouter } from 'react-router-dom';
 import MainPage from './MainPage.tsx';
 import SearchBox from '../SearchBox/SearchBox.tsx';
 import ResultsBox from '../ResultsBox/ResultsBox.tsx';
@@ -7,18 +6,41 @@ import '@testing-library/jest-dom';
 import { store } from '../../store/store.ts';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
-// import mockRouter from '../../__mocks__/mockRouter.ts';
 import { PlanetAPIResponse } from '../../types/types.ts';
+import ThemeToggle from '../ThemeToggle/ThemeToggle.tsx';
 
 jest.mock('next/router', () => ({
-	useRouter: jest.fn(),
+	useRouter: () => ({
+		router: {
+			events: {
+				on: jest.fn(),
+				off: jest.fn(),
+			},
+		},
+		push: jest.fn(),
+		prefetch: jest.fn(),
+		query: {},
+	}),
 }));
 
-jest.mock('../SearchBox/SearchBox.tsx');
-jest.mock('../ResultsBox/ResultsBox.tsx');
+jest.mock('../SearchBox/SearchBox.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
+
+jest.mock('../ResultsBox/ResultsBox.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
+
+jest.mock('../ThemeToggle/ThemeToggle.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
 
 const mockSearchBox = SearchBox as jest.MockedFunction<typeof SearchBox>;
 const mockResultsBox = ResultsBox as jest.MockedFunction<typeof ResultsBox>;
+const mockThemeToggle = ThemeToggle as jest.MockedFunction<typeof ThemeToggle>;
 
 const mockPlanetsData: PlanetAPIResponse = {
 	results: [
@@ -74,64 +96,82 @@ describe('MainPage', () => {
 				<button onClick={() => onPageChange && onPageChange(2)}>Next Page</button>
 			</div>
 		));
+		mockThemeToggle.mockImplementation(() => (
+			<button data-testid="theme-toggle-button">Toggle Theme</button>
+		));
 	});
-	// mockRouter({ page: 1 });
-});
 
-const mockOnPageChange = jest.fn();
+	it('renders SearchBox and ResultsBox components', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+				</Provider>
+			</ThemeProvider>
+		);
 
-it('renders SearchBox and ResultsBox components', () => {
-	render(
-		<ThemeProvider>
-			<Provider store={store}>
-				<MainPage
-					initialPlanets={mockPlanetsData}
-					initialPage={1}
-					onPageChange={mockOnPageChange}
-				/>
-			</Provider>
-		</ThemeProvider>
-	);
-
-	expect(screen.getByTestId('mock-search-box')).toBeInTheDocument();
-	expect(screen.getByTestId('mock-results-box')).toBeInTheDocument();
-});
-
-it('updates search term state on input change', () => {
-	render(
-		<ThemeProvider>
-			<Provider store={store}>
-				<MainPage
-					initialPlanets={mockPlanetsData}
-					initialPage={1}
-					onPageChange={mockOnPageChange}
-				/>
-			</Provider>
-		</ThemeProvider>
-	);
-
-	const input = screen.getByTestId('search-input');
-	fireEvent.change(input, { target: { value: 'new term' } });
-	expect(input).toHaveValue('new term');
-});
-
-it('shows details section when an item is clicked', async () => {
-	render(
-		<ThemeProvider>
-			<Provider store={store}>
-				<MainPage
-					initialPlanets={mockPlanetsData}
-					initialPage={1}
-					onPageChange={mockOnPageChange}
-				/>
-			</Provider>
-		</ThemeProvider>
-	);
-
-	const resultItem = screen.getByTestId('result-item');
-	fireEvent.click(resultItem);
-
-	await waitFor(() => {
+		expect(screen.getByTestId('mock-search-box')).toBeInTheDocument();
 		expect(screen.getByTestId('mock-results-box')).toBeInTheDocument();
+	});
+
+	it('updates search term state on input change', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const input = screen.getByTestId('search-input');
+		fireEvent.change(input, { target: { value: 'new term' } });
+		expect(input).toHaveValue('new term');
+	});
+
+	it('shows details section when an item is clicked', async () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const resultItem = screen.getByTestId('result-item');
+		fireEvent.click(resultItem);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('mock-results-box')).toBeInTheDocument();
+		});
+	});
+
+	it('calls onPageChange when page is changed', () => {
+		const onPageChange = jest.fn();
+
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage initialPlanets={mockPlanetsData} initialPage={1} onPageChange={onPageChange} />
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const nextPageButton = screen.getByText('Next Page');
+		fireEvent.click(nextPageButton);
+
+		expect(onPageChange).toHaveBeenCalledWith(2);
+	});
+
+	it('changes theme when ThemeToggle button is clicked', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const themeToggleButton = screen.getByTestId('theme-toggle-button');
+		fireEvent.click(themeToggleButton);
 	});
 });

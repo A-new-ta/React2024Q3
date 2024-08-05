@@ -19,11 +19,9 @@ export function renderWithProviders(
 		preloadedState = {} as PreloadedState,
 		store = configureStore({
 			reducer: {
-				// [apiSlice.reducerPath]: apiSlice.reducer,
 				results: resultsReducer,
 				planetDetails: planetDetailsReducer,
 			},
-			// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 			preloadedState,
 		}),
 		...renderOptions

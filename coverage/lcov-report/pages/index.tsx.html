@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -134,12 +134,12 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,13 +204,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { FC, useEffect } from 'react';
-import MainPage from '../components/MainPage/MainPage.tsx';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { FC, useEffect } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import MainPage from '../components/MainPage/MainPage.tsx';</span>
 import { GetServerSideProps } from 'next';
-import { useDispatch } from 'react-redux';
-import { setCurrentPageItems } from '../store/resultsSlice.ts';
-import { useRouter } from 'next/router';
+<span class="cstat-no" title="statement not covered" >import { useDispatch } from 'react-redux';</span>
+<span class="cstat-no" title="statement not covered" >import { setCurrentPageItems } from '../store/resultsSlice.ts';</span>
+<span class="cstat-no" title="statement not covered" >import { useRouter } from 'next/router';</span>
 import { PlanetAPIResponse, PlanetDetails } from '../types/types.ts';
 &nbsp;
 interface HomeProps {
@@ -221,12 +221,12 @@ const Home: FC&lt;HomeProps&gt; = <span class="cstat-no" title="statement not co
 	const dispatch = <span class="cstat-no" title="statement not covered" >useDispatch();</span>
 	const router = <span class="cstat-no" title="statement not covered" >useRouter();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		if (initialPlanets) {</span>
+<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
+<span class="cstat-no" title="statement not covered" >		<span class="missing-if-branch" title="if path not taken" >I</span>if (initialPlanets) {</span>
 <span class="cstat-no" title="statement not covered" >			dispatch(setCurrentPageItems(initialPlanets));</span>
 		}
 	}, [initialPlanets, dispatch]);
-	const handlePageChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewPage: number) =&gt; {</span>
+	const handlePageChange = (<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >newPage: number)</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >		router.push({</span>
 			pathname: '/',
 			query: { search: router.query.search || '', page: newPage.toString() },
@@ -242,11 +242,11 @@ const Home: FC&lt;HomeProps&gt; = <span class="cstat-no" title="statement not co
 	);
 };
 &nbsp;
-export const getServerSideProps: GetServerSideProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (context) =&gt; {</span>
+export const <span class="cstat-no" title="statement not covered" >getServerSideProps: GetServerSideProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >a</span>sync (c</span>ontext) =&gt; {</span>
 	const { search = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> page = <span class="branch-0 cbranch-no" title="branch not covered" >1 </span>} = <span class="cstat-no" title="statement not covered" >context.query;</span>
 	const response = <span class="cstat-no" title="statement not covered" >await fetch(`https://swapi.dev/api/planets/?search=${search}&amp;page=${page}`);</span>
 	const results = <span class="cstat-no" title="statement not covered" >await response.json();</span>
-	const planetResults = <span class="cstat-no" title="statement not covered" >results.results.map(<span class="fstat-no" title="function not covered" >(p</span>lanet: PlanetDetails) =&gt; {</span>
+	const planetResults = <span class="cstat-no" title="statement not covered" >results.results.map((<span class="fstat-no" title="function not covered" >planet: PlanetDetails)</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >		return {</span>
 			name: planet.name,
 			terrain: planet.terrain,
@@ -275,7 +275,7 @@ export const getServerSideProps: GetServerSideProps = <span class="cstat-no" tit
 	};
 };
 &nbsp;
-export default Home;
+<span class="cstat-no" title="statement not covered" >export default Home;</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -283,7 +283,7 @@ export default Home;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T07:56:03.317Z
+                at 2024-08-05T21:07:27.546Z
             </div>
         <script src="../prettify.js"></script>
         <script>

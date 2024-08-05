@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>18/21</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -90,60 +90,60 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useEffect, useState } from 'react';</span>
-<span class="cstat-no" title="statement not covered" >import { useRouter } from 'next/router';</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 &nbsp;
-const useLoadingOnRouteChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-	const [loading, setLoading] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-	const router = <span class="cstat-no" title="statement not covered" >useRouter();</span>
+const useLoadingOnRouteChange = () =&gt; {
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-		const handleRouteChangeStart = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(true);</span></span>
-		const handleRouteChangeComplete = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(false);</span></span>
-		const handleRouteChangeError = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(false);</span></span>
+	useEffect(() =&gt; {
+		const handleRouteChangeStart = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(true);</span>
+		const handleRouteChangeComplete = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(false);</span>
+		const handleRouteChangeError = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >s</span>etLoading(false);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		router.events.on('routeChangeStart', handleRouteChangeStart);</span>
-<span class="cstat-no" title="statement not covered" >		router.events.on('routeChangeComplete', handleRouteChangeComplete);</span>
-<span class="cstat-no" title="statement not covered" >		router.events.on('routeChangeError', handleRouteChangeError);</span>
+		router.events.on('routeChangeStart', handleRouteChangeStart);
+		router.events.on('routeChangeComplete', handleRouteChangeComplete);
+		router.events.on('routeChangeError', handleRouteChangeError);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return <span class="fstat-no" title="function not covered" >() =&gt; </span>{</span>
-<span class="cstat-no" title="statement not covered" >			router.events.off('routeChangeStart', handleRouteChangeStart);</span>
-<span class="cstat-no" title="statement not covered" >			router.events.off('routeChangeComplete', handleRouteChangeComplete);</span>
-<span class="cstat-no" title="statement not covered" >			router.events.off('routeChangeError', handleRouteChangeError);</span>
+		return () =&gt; {
+			router.events.off('routeChangeStart', handleRouteChangeStart);
+			router.events.off('routeChangeComplete', handleRouteChangeComplete);
+			router.events.off('routeChangeError', handleRouteChangeError);
 		};
 	}, [router.events]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return loading;</span>
+	return loading;
 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default useLoadingOnRouteChange;</span>
+export default useLoadingOnRouteChange;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -151,7 +151,7 @@ const useLoadingOnRouteChange = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T13:05:33.596Z
+                at 2024-08-05T21:08:20.843Z
             </div>
         <script src="../prettify.js"></script>
         <script>

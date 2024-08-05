@@ -1,178 +1,132 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DetailsCard from './DetailsCard';
-import { BrowserRouter } from 'react-router-dom';
+import { Provider, useSelector } from 'react-redux';
+import { RootState, store } from '../../store/store.ts';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
+import { useRouter } from 'next/router';
 import { PlanetDetails } from '../../types/types.ts';
-import { act } from 'react';
-import { useGetPlanetDetailsQuery } from '../../store/apiSlice.ts';
-import { renderWithProviders } from '../../helpers/test-utils.tsx';
 
-jest.mock('../../store/apiSlice.ts');
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useOutletContext: () => ({
-		handleCloseDetails: jest.fn(),
-	}),
+jest.mock('next/router', () => ({
+	useRouter: jest.fn(),
 }));
 
-const mockedUseGetPlanetDetailsQuery = useGetPlanetDetailsQuery as jest.MockedFunction<
-	typeof useGetPlanetDetailsQuery
->;
+jest.mock('react-redux', () => ({
+	...jest.requireActual('react-redux'),
+	useSelector: jest.fn(),
+}));
+
+const mockPlanetDetails: PlanetDetails = {
+	name: 'Planet 1',
+	terrain: 'terrain 1',
+	population: '2000',
+	climate: 'temperate',
+	orbital_period: '365',
+	rotation_period: '24',
+	surface_water: '40',
+	diameter: '10000',
+	gravity: '1 standard',
+	url: 'http://example.com/1',
+	id: '1',
+};
+
 describe('DetailsCard', () => {
-	it('displays a loading indicator while fetching data', async () => {
-		mockedUseGetPlanetDetailsQuery.mockReturnValue({
-			data: undefined,
-			error: undefined,
-			isLoading: true,
-			refetch: jest.fn(),
-			isFetching: true,
-			isUninitialized: false,
-			isSuccess: false,
-			isError: false,
-			requestId: '',
-			endpointName: 'getPlanetDetails',
-			startedTimeStamp: Date.now(),
-			status: 'pending',
-		});
-		await act(async () => {
-			renderWithProviders(
-				<BrowserRouter>
-					<DetailsCard />
-				</BrowserRouter>
-			);
+	const mockPush = jest.fn();
+
+	beforeEach(() => {
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: {},
+			asPath: '/',
+			events: {
+				on: jest.fn(),
+				off: jest.fn(),
+			},
 		});
 
-		const loadingMessage = screen.getByText(/loading.../i);
-		expect(loadingMessage).toBeInTheDocument();
+		(useSelector as jest.Mock).mockImplementation((selectorFn: (state: RootState) => never) => {
+			return selectorFn({
+				planetDetails: {
+					details: mockPlanetDetails,
+				},
+			} as RootState);
+		});
 	});
 
-	it('displays planet details when data is fetched', async () => {
-		const mockResponse: PlanetDetails = {
-			name: 'Planet 1',
-			terrain: 'terrain 1',
-			population: '1000',
-			climate: 'temperate',
-			orbital_period: '365',
-			rotation_period: '24',
-			surface_water: '40',
-			diameter: '10000',
-			gravity: '1 standard',
-			url: 'http://example.com/1',
-			id: '1',
-		};
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
-		mockedUseGetPlanetDetailsQuery.mockReturnValue({
-			data: mockResponse,
-			error: undefined,
-			isLoading: false,
-			refetch: jest.fn(),
-			isFetching: false,
-			isUninitialized: false,
-			isSuccess: true,
-			isError: false,
-			requestId: '',
-			endpointName: 'getPlanetDetails',
-			startedTimeStamp: Date.now(),
-			status: 'fulfilled',
+	it('displays the loading indicator while data is loading', () => {
+		(useSelector as jest.Mock).mockImplementationOnce((selectorFn: (state: RootState) => never) => {
+			return selectorFn({
+				planetDetails: {
+					details: null,
+				},
+			} as RootState);
 		});
 
-		await act(async () => {
-			renderWithProviders(
-				<BrowserRouter>
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
 					<DetailsCard />
-				</BrowserRouter>
-			);
-		});
+				</Provider>
+			</ThemeProvider>
+		);
 
-		await waitFor(() => {
-			expect(screen.getByText(/planet 1/i)).toBeInTheDocument();
-		});
+		expect(screen.getByText(/loading.../i)).toBeInTheDocument();
+	});
 
+	it('displays planet details when data is available', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<DetailsCard />
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByText(/planet 1/i)).toBeInTheDocument();
 		expect(screen.getByText(/terrain:/i)).toBeInTheDocument();
+		expect(screen.getByText(/terrain 1/i)).toBeInTheDocument();
+		expect(screen.getByText(/population:/i)).toBeInTheDocument();
+		expect(screen.getByText(/2000/i)).toBeInTheDocument();
 		expect(screen.getByText(/climate:/i)).toBeInTheDocument();
+		expect(screen.getByText(/temperate/i)).toBeInTheDocument();
 		expect(screen.getByText(/orbital period:/i)).toBeInTheDocument();
-		expect(screen.getByText(/rotation period:/i)).toBeInTheDocument();
-		expect(screen.getByText(/surface water:/i)).toBeInTheDocument();
-		expect(screen.getByText(/diameter:/i)).toBeInTheDocument();
-		expect(screen.getByText(/gravity:/i)).toBeInTheDocument();
+		expect(screen.getByText(/365/i)).toBeInTheDocument();
 	});
 
-	it('displays an error message when there is an error fetching data', async () => {
-		mockedUseGetPlanetDetailsQuery.mockReturnValue({
-			data: undefined,
-			error: new Error('Failed to fetch data'),
-			isLoading: false,
-			refetch: jest.fn(),
-			isFetching: false,
-			isUninitialized: false,
-			isSuccess: false,
-			isError: true,
-			requestId: '',
-			endpointName: 'getPlanetDetails',
-			startedTimeStamp: Date.now(),
-			status: 'rejected',
+	it('displays an error message when planet details are not available', () => {
+		(useSelector as jest.Mock).mockImplementationOnce((selectorFn: (state: RootState) => never) => {
+			return selectorFn({
+				planetDetails: {
+					details: null,
+				},
+			} as RootState);
 		});
 
-		await act(async () => {
-			renderWithProviders(
-				<BrowserRouter>
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
 					<DetailsCard />
-				</BrowserRouter>
-			);
-		});
+				</Provider>
+			</ThemeProvider>
+		);
 
-		const errorMessage = screen.getByText(/error loading planet details/i);
-		expect(errorMessage).toBeInTheDocument();
+		expect(screen.getByText(/error loading planet details/i)).toBeInTheDocument();
 	});
 
-	it('hides the component when close button is clicked', async () => {
-		const mockResponse: PlanetDetails = {
-			name: 'Planet 1',
-			terrain: 'terrain 1',
-			population: '1000',
-			climate: 'temperate',
-			orbital_period: '365',
-			rotation_period: '24',
-			surface_water: '40',
-			diameter: '10000',
-			gravity: '1 standard',
-			url: 'http://example.com/1',
-			id: '1',
-		};
-
-		mockedUseGetPlanetDetailsQuery.mockReturnValue({
-			data: mockResponse,
-			error: undefined,
-			isLoading: false,
-			refetch: jest.fn(),
-			isFetching: false,
-			isUninitialized: false,
-			isSuccess: true,
-			isError: false,
-			requestId: '',
-			endpointName: 'getPlanetDetails',
-			startedTimeStamp: Date.now(),
-			status: 'fulfilled',
-		});
-		await act(async () => {
-			renderWithProviders(
-				<BrowserRouter>
+	it('navigates back to the main page when the close button is clicked', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
 					<DetailsCard />
-				</BrowserRouter>
-			);
-		});
-		await waitFor(() => {
-			expect(screen.getByText(/planet 1/i)).toBeInTheDocument();
-		});
-		const closeButton = screen.getByText(/close/i);
-		await act(async () => {
-			fireEvent.click(closeButton);
-		});
+				</Provider>
+			</ThemeProvider>
+		);
 
-		await waitFor(() => {
-			expect(screen.queryByText(/planet 1/i)).toBeInTheDocument();
-		});
-		// const { handleCloseDetails } = useOutletContext<ContextType>();
-		// expect(handleCloseDetails).toHaveBeenCalled();
+		fireEvent.click(screen.getByText(/close/i));
+		expect(mockPush).toHaveBeenCalledWith('/');
 	});
 });

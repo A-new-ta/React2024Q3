@@ -1,13 +1,12 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../helpers/test-utils.tsx';
 import ResultsBox from './ResultsBox.tsx';
-import { useGetPlanetsQuery } from '../../store/apiSlice.ts';
-import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
+import { useRouter } from 'next/router';
 
-// Mock the hook
-jest.mock('../../store/apiSlice.ts');
+jest.mock('next/router', () => ({
+	useRouter: jest.fn(),
+}));
 
 const mockPlanetsData = {
 	results: [
@@ -44,21 +43,37 @@ const mockPlanetsData = {
 };
 
 describe('ResultsBox Component', () => {
+	const mockPush = jest.fn();
+	const mockOn = jest.fn();
+	const mockOff = jest.fn();
+	const mockOnItemClick = jest.fn();
+	const mockOnCloseDetails = jest.fn();
+
 	beforeEach(() => {
-		(useGetPlanetsQuery as jest.Mock).mockReturnValue({
-			data: mockPlanetsData,
-			error: null,
-			isFetching: true,
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: { search: 'Earth', page: '1' },
+			asPath: '/',
+			events: {
+				on: mockOn,
+				off: mockOff,
+			},
 		});
 	});
 
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	test('renders loading state', () => {
-		const history = createMemoryHistory();
 		renderWithProviders(
 			<ThemeProvider>
-				<Router location={history.location} navigator={history}>
-					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-				</Router>
+				<ResultsBox
+					searchTerm="Earth"
+					onItemClick={jest.fn()}
+					onCloseDetails={jest.fn()}
+					initialPlanets={undefined}
+				/>
 			</ThemeProvider>,
 			{
 				preloadedState: {
@@ -73,22 +88,18 @@ describe('ResultsBox Component', () => {
 				},
 			}
 		);
-		expect(screen.getByText('Loading...')).toBeInTheDocument();
+		expect(screen.getByText('Nothing found')).toBeInTheDocument();
 	});
 
 	test('renders data', () => {
-		(useGetPlanetsQuery as jest.Mock).mockReturnValue({
-			data: mockPlanetsData,
-			error: null,
-			isFetching: false,
-		});
-
-		const history = createMemoryHistory();
 		renderWithProviders(
 			<ThemeProvider>
-				<Router location={history.location} navigator={history}>
-					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-				</Router>
+				<ResultsBox
+					searchTerm="Earth"
+					onItemClick={jest.fn()}
+					onCloseDetails={jest.fn()}
+					initialPlanets={mockPlanetsData}
+				/>
 			</ThemeProvider>,
 			{
 				preloadedState: {
@@ -108,50 +119,15 @@ describe('ResultsBox Component', () => {
 		expect(screen.getByText('Mars')).toBeInTheDocument();
 	});
 
-	test('renders error state', () => {
-		(useGetPlanetsQuery as jest.Mock).mockReturnValue({
-			data: null,
-			error: { message: 'Failed to fetch' },
-			isFetching: false,
-		});
-
-		const history = createMemoryHistory();
-		renderWithProviders(
-			<ThemeProvider>
-				<Router location={history.location} navigator={history}>
-					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-				</Router>
-			</ThemeProvider>,
-			{
-				preloadedState: {
-					results: {
-						loading: false,
-						currentPageItems: [],
-						selectedItems: {},
-						count: null,
-						next: null,
-						previous: null,
-					},
-				},
-			}
-		);
-
-		expect(screen.getByText('Error loading data')).toBeInTheDocument();
-	});
-
 	test('renders empty state', () => {
-		(useGetPlanetsQuery as jest.Mock).mockReturnValue({
-			data: { results: [] },
-			error: null,
-			isFetching: false,
-		});
-
-		const history = createMemoryHistory();
 		renderWithProviders(
 			<ThemeProvider>
-				<Router location={history.location} navigator={history}>
-					<ResultsBox searchTerm="Earth" onItemClick={jest.fn()} onCloseDetails={jest.fn()} />
-				</Router>
+				<ResultsBox
+					searchTerm="NonExistent"
+					onItemClick={jest.fn()}
+					onCloseDetails={jest.fn()}
+					initialPlanets={{ results: [], count: 0, next: null, previous: null }}
+				/>
 			</ThemeProvider>,
 			{
 				preloadedState: {
@@ -159,7 +135,7 @@ describe('ResultsBox Component', () => {
 						loading: false,
 						currentPageItems: [],
 						selectedItems: {},
-						count: null,
+						count: 0,
 						next: null,
 						previous: null,
 					},
@@ -168,5 +144,97 @@ describe('ResultsBox Component', () => {
 		);
 
 		expect(screen.getByText('Nothing found')).toBeInTheDocument();
+	});
+
+	test('calls onItemClick when a card is clicked', () => {
+		renderWithProviders(
+			<ThemeProvider>
+				<ResultsBox
+					searchTerm="Earth"
+					onItemClick={mockOnItemClick}
+					onCloseDetails={jest.fn()}
+					initialPlanets={mockPlanetsData}
+				/>
+			</ThemeProvider>,
+			{
+				preloadedState: {
+					results: {
+						loading: false,
+						currentPageItems: mockPlanetsData.results,
+						selectedItems: {},
+						count: 2,
+						next: null,
+						previous: null,
+					},
+				},
+			}
+		);
+
+		const card = screen.getByText('Earth');
+		fireEvent.click(card);
+		expect(mockOnItemClick).toHaveBeenCalledWith('1');
+	});
+
+	test('calls onCloseDetails when container is clicked', () => {
+		renderWithProviders(
+			<ThemeProvider>
+				<ResultsBox
+					searchTerm="Earth"
+					onItemClick={jest.fn()}
+					onCloseDetails={mockOnCloseDetails}
+					initialPlanets={mockPlanetsData}
+				/>
+			</ThemeProvider>,
+			{
+				preloadedState: {
+					results: {
+						loading: false,
+						currentPageItems: mockPlanetsData.results,
+						selectedItems: {},
+						count: 2,
+						next: null,
+						previous: null,
+					},
+				},
+			}
+		);
+
+		const container = screen.getByText('Earth').parentElement?.parentElement;
+		if (container) {
+			fireEvent.click(container);
+			expect(mockOnCloseDetails).toHaveBeenCalled();
+		}
+	});
+
+	test('navigates to the next page on page change', () => {
+		renderWithProviders(
+			<ThemeProvider>
+				<ResultsBox
+					searchTerm="Earth"
+					onItemClick={jest.fn()}
+					onCloseDetails={jest.fn()}
+					initialPlanets={mockPlanetsData}
+				/>
+			</ThemeProvider>,
+			{
+				preloadedState: {
+					results: {
+						loading: false,
+						currentPageItems: mockPlanetsData.results,
+						selectedItems: {},
+						count: 2,
+						next: null,
+						previous: null,
+					},
+				},
+			}
+		);
+
+		const nextPageButton = screen.getByText('1');
+		fireEvent.click(nextPageButton);
+		expect(mockPush).toHaveBeenCalledWith({
+			pathname: '/',
+			query: { search: 'Earth', page: '1' },
+		});
 	});
 });

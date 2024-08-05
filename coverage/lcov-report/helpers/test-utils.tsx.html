@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,23 +101,21 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,23 +126,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { PropsWithChildren } from 'react';
-<span class="cstat-no" title="statement not covered" >import { render } from '@testing-library/react';</span>
+import { render } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
-<span class="cstat-no" title="statement not covered" >import { Provider } from 'react-redux';</span>
-<span class="cstat-no" title="statement not covered" >import { configureStore } from '@reduxjs/toolkit';</span>
-<span class="cstat-no" title="statement not covered" >import resultsReducer from '../store/resultsSlice.ts';</span>
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import resultsReducer from '../store/resultsSlice.ts';
 import type { RootState } from '../store/store.ts';
-<span class="cstat-no" title="statement not covered" >import planetDetailsReducer from '../store/planetDetailsSlice.ts';</span>
+import planetDetailsReducer from '../store/planetDetailsSlice.ts';
 &nbsp;
 type PreloadedState = Partial&lt;RootState&gt;;
 interface ExtendedRenderOptions extends Omit&lt;RenderOptions, 'queries'&gt; {
@@ -152,11 +152,11 @@ interface ExtendedRenderOptions extends Omit&lt;RenderOptions, 'queries'&gt; {
 	store?: ReturnType&lt;typeof configureStore&gt;;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >r</span>enderWithProviders(</span>
+export function renderWithProviders(
 	ui: React.ReactElement,
 	{
 		preloadedState = <span class="branch-0 cbranch-no" title="branch not covered" >{} as PreloadedState,</span>
-		store = <span class="branch-0 cbranch-no" title="branch not covered" >configureStore({</span>
+		store = configureStore({
 			reducer: {
 				// [apiSlice.reducerPath]: apiSlice.reducer,
 				results: resultsReducer,
@@ -165,14 +165,14 @@ interface ExtendedRenderOptions extends Omit&lt;RenderOptions, 'queries'&gt; {
 			// middleware: (getDefaultMiddleware) =&gt; getDefaultMiddleware().concat(apiSlice.middleware),
 			preloadedState,
 		}),
-		...renderOptions<span class="cstat-no" title="statement not covered" ></span>
+		...renderOptions
 	}: ExtendedRenderOptions = <span class="branch-0 cbranch-no" title="branch not covered" >{}</span>
 ) {
-	const Wrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> children }: PropsWithChildren&lt;NonNullable&lt;unknown&gt;&gt;) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >		&lt;Provider store={store}&gt;{children}&lt;/Provider&gt;</span>
+	const Wrapper = ({ children }: PropsWithChildren&lt;NonNullable&lt;unknown&gt;&gt;) =&gt; (
+		&lt;Provider store={store}&gt;{children}&lt;/Provider&gt;
 	);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };</span>
+	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -181,7 +181,7 @@ interface ExtendedRenderOptions extends Omit&lt;RenderOptions, 'queries'&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T13:05:33.596Z
+                at 2024-08-05T13:20:53.377Z
             </div>
         <script src="../prettify.js"></script>
         <script>

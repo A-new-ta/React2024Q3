@@ -23,7 +23,7 @@ const ResultsBox: React.FC<Props> = ({
 	onItemClick,
 	onCloseDetails,
 	initialPlanets,
-	onPageChange,
+	// onPageChange,
 }) => {
 	const router = useRouter();
 	const { push } = router;
@@ -34,7 +34,13 @@ const ResultsBox: React.FC<Props> = ({
 	const previousSearchTerm = useRef<string>(searchTerm);
 	const { theme } = useTheme();
 	const loading = useLoadingOnRouteChange();
-
+	const handlePageChange = (newPage: number) => {
+		onCloseDetails();
+		router.push({
+			pathname: '/',
+			query: { search: router.query.search || '', page: newPage.toString() },
+		});
+	};
 	useEffect(() => {
 		if (initialPlanets) {
 			dispatch(setCurrentPageItems(initialPlanets));
@@ -48,10 +54,10 @@ const ResultsBox: React.FC<Props> = ({
 		}
 	}, [searchTerm, push, onCloseDetails]);
 
-	const handlePageChange = (newPage: number) => {
-		onCloseDetails();
-		onPageChange(newPage);
-	};
+	// const handlePageChange = (newPage: number) => {
+	// 	onCloseDetails();
+	// 	onPageChange(newPage);
+	// };
 
 	const handleContainerClick = () => {
 		onCloseDetails();
