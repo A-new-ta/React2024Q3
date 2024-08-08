@@ -1,17 +1,41 @@
-import React from 'react';
-import { useRouter } from 'next/router';
-import { RootState } from '../../store/store.ts';
-import { useSelector } from 'react-redux';
-import useLoadingOnRouteChange from '../../helpers/useLoadingOnRouteChange.ts';
+'use client';
 
-const DetailsCard: React.FC = () => {
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { clearPlanetDetails, setPlanetDetails } from '../../store/planetDetailsSlice.ts';
+
+interface PlanetDetailsProps {
+	planetDetails: {
+		name: string;
+		terrain: string;
+		population: string;
+		id: string;
+		diameter: string;
+		gravity: string;
+		climate: string;
+		orbital_period: string;
+		rotation_period: string;
+		surface_water: string;
+		url: string;
+	};
+}
+
+const DetailsCard: React.FC = ({ planetDetails }: PlanetDetailsProps) => {
 	const router = useRouter();
-	const planetDetails = useSelector((state: RootState) => state.planetDetails.details);
-	const loading = useLoadingOnRouteChange();
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (planetDetails) {
+			dispatch(setPlanetDetails(planetDetails));
+		}
+	}, [planetDetails, dispatch]);
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
+	const handleClose = () => {
+		const searchParams = new URLSearchParams(window.location.search);
+		searchParams.delete('id');
+		router.push(`/?${searchParams.toString()}`);
+		dispatch(clearPlanetDetails());
+	};
 
 	if (!planetDetails) {
 		return <div>Error loading planet details</div>;
@@ -19,7 +43,7 @@ const DetailsCard: React.FC = () => {
 
 	return (
 		<div>
-			<button onClick={() => router.push('/')}>Close</button>
+			<button onClick={handleClose}>Close</button>
 			{planetDetails && (
 				<div>
 					<h2>{planetDetails.name}</h2>

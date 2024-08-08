@@ -1,5 +1,7 @@
-import { FC, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+'use client';
+
+import { FC } from 'react';
+import { useRouter } from 'next/navigation';
 import SearchBox from '../SearchBox/SearchBox';
 import ResultsBox from '../ResultsBox/ResultsBox';
 import Flyout from '../Flyout/Flyout';
@@ -8,54 +10,53 @@ import useLocalStorage from '../../helpers/useLocalStorage.ts';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './MainPage.module.css';
 import DetailsCard from '../DetailsCard/DetailsCard.tsx';
-import { PlanetAPIResponse } from '../../types/types.ts';
+import { PlanetAPIResponse, PlanetDetails } from '../../types/types.ts';
 
 interface MainPageProps {
 	initialPlanets?: PlanetAPIResponse;
+	planetDetails: PlanetDetails | null;
 	initialPage?: number;
-	onPageChange?: (newPage: number) => void;
+	selectedId: string | null;
+	loading: boolean;
+	setLoading: (loading: boolean) => void;
 }
-const MainPage: FC<MainPageProps> = ({ initialPlanets, initialPage, onPageChange }) => {
+const MainPage: FC<MainPageProps> = ({
+	initialPlanets,
+	planetDetails,
+	initialPage,
+	selectedId,
+	loading,
+	setLoading,
+}) => {
 	const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
-	const [showDetails, setShowDetails] = useState<boolean>(false);
 	const { theme } = useTheme();
 	const router = useRouter();
-	const [selectedId, setSelectedId] = useState<string | null>(null);
-
-	useEffect(() => {
-		const { id } = router.query;
-		if (id) {
-			setSelectedId(id as string);
-			setShowDetails(true);
-		} else {
-			setShowDetails(false);
-			setSelectedId(null);
-		}
-	}, [router.query]);
 
 	const handleCloseDetails = () => {
-		if (showDetails) {
-			const { search, page } = router.query;
-			router.push({
-				pathname: '/',
-				query: { search, page },
-			});
-			setShowDetails(false);
-			setSelectedId(null);
+		if (selectedId) {
+			setLoading(true);
+			const searchParams = new URLSearchParams(window.location.search);
+			searchParams.delete('id');
+			router.push(`/?${searchParams.toString()}`);
 		}
 	};
 	const handleItemClick = (itemId: string) => {
-		router.push({
-			pathname: `/details/${itemId}`,
-			query: { search: router.query.search || '', page: router.query.page || '1' },
-		});
-		// setShowDetails(true);
+		setLoading(true);
+		const searchParams = new URLSearchParams();
+		if (searchTerm) searchParams.append('search', searchTerm);
+		if (initialPage != null) {
+			searchParams.append('page', initialPage.toString());
+		}
+		searchParams.append('id', itemId);
+
+		router.push(`/?${searchParams.toString()}`);
 	};
+
 	return (
 		<div
 			className={`${styles.mainPage} ${theme === 'light' ? styles.mainPageThemeLight : styles.mainPageThemeDark}`}
 		>
-			<div className={`${styles.leftSection} ${showDetails ? styles.leftSectionShrink : ''}`}>
+			<div className={`${styles.leftSection} ${selectedId ? styles.leftSectionShrink : ''}`}>
 				<div
 					className={`${styles.topSection} ${theme === 'light' ? styles.topSectionThemeLight : styles.topSectionThemeDark}`}
 				>
@@ -69,15 +70,18 @@ const MainPage: FC<MainPageProps> = ({ initialPlanets, initialPage, onPageChange
 						onCloseDetails={handleCloseDetails}
 						initialPlanets={initialPlanets}
 						initialPage={initialPage}
-						onPageChange={onPageChange}
 					/>
 				</div>
 			</div>
-			{showDetails && selectedId && (
+			{selectedId && (
 				<div
 					className={`${styles.rightSection} ${theme === 'light' ? styles.rightSectionThemeLight : styles.rightSectionThemeDark}`}
 				>
-					<DetailsCard />
+					{loading ? (
+						<div>Loading...</div>
+					) : (
+						planetDetails && <DetailsCard planetDetails={planetDetails} />
+					)}
 				</div>
 			)}
 			<Flyout />

@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './ResultsBox.module.css';
 import { setCurrentPageItems, selectItem, unselectItem } from '../../store/resultsSlice.ts';
@@ -7,7 +9,6 @@ import { RootState } from '../../store/store.ts';
 import Pagination from '../Pagination/Pagination.tsx';
 import { PlanetAPIResponse, PlanetDetails } from '../../types/types.ts';
 import { useTheme } from '../../context/ThemeContext.tsx';
-import useLoadingOnRouteChange from '../../helpers/useLoadingOnRouteChange.ts';
 
 interface Props {
 	searchTerm: string;
@@ -15,7 +16,6 @@ interface Props {
 	onCloseDetails: () => void;
 	initialPlanets?: PlanetAPIResponse;
 	initialPage?: number;
-	onPageChange?: (newPage: number) => void;
 }
 
 const ResultsBox: React.FC<Props> = ({
@@ -23,41 +23,42 @@ const ResultsBox: React.FC<Props> = ({
 	onItemClick,
 	onCloseDetails,
 	initialPlanets,
-	// onPageChange,
 }) => {
 	const router = useRouter();
-	const { push } = router;
 	const dispatch = useDispatch();
 	const { currentPageItems, selectedItems, count } = useSelector(
 		(state: RootState) => state.results
 	);
 	const previousSearchTerm = useRef<string>(searchTerm);
 	const { theme } = useTheme();
-	const loading = useLoadingOnRouteChange();
+	const [loading, setLoading] = useState<boolean>(true);
 	const handlePageChange = (newPage: number) => {
+		console.log('page change in results');
 		onCloseDetails();
-		router.push({
-			pathname: '/',
-			query: { search: router.query.search || '', page: newPage.toString() },
-		});
+		setLoading(true);
+		const searchParams = new URLSearchParams();
+		if (searchTerm) searchParams.append('search', searchTerm);
+		searchParams.append('page', newPage.toString());
+
+		router.push(`/?${searchParams.toString()}`);
 	};
+
 	useEffect(() => {
 		if (initialPlanets) {
 			dispatch(setCurrentPageItems(initialPlanets));
+			setLoading(false);
 		}
 	}, [initialPlanets, dispatch]);
 	useEffect(() => {
 		if (previousSearchTerm.current !== searchTerm) {
 			onCloseDetails();
-			push({ pathname: '/', query: { search: searchTerm, page: '1' } });
+			const params = new URLSearchParams(window.location.search);
+			params.set('search', searchTerm);
+			params.set('page', '1');
+			router.push(`/?${params.toString()}`);
 			previousSearchTerm.current = searchTerm;
 		}
-	}, [searchTerm, push, onCloseDetails]);
-
-	// const handlePageChange = (newPage: number) => {
-	// 	onCloseDetails();
-	// 	onPageChange(newPage);
-	// };
+	}, [searchTerm, router, onCloseDetails]);
 
 	const handleContainerClick = () => {
 		onCloseDetails();
@@ -111,7 +112,7 @@ const ResultsBox: React.FC<Props> = ({
 					{currentPageItems.length > 0 && (
 						<div onClick={handlePaginationClick}>
 							<Pagination
-								currentPage={Number(router.query.page) || 1}
+								currentPage={Number(new URLSearchParams(window.location.search).get('page')) || 1}
 								onPageChange={handlePageChange}
 								totalPages={Math.ceil((count ?? 0) / 10)}
 							/>

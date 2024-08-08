@@ -4,7 +4,9 @@
     "module": "CommonJS",
     "lib": [
       "ES2020",
-      "DOM"
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,34 +20,34 @@
     "baseUrl": ".",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    //    "incremental": true,
-    //    "composite": true,
-    //    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    //    "useDefineForClassFields": true,
-    //    "noImplicitAny": true,
-    //    "noUnusedLocals": true,
-    //    "noUnusedParameters": true,
-    //    "noFallthroughCasesInSwitch": true,
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "useDefineForClassFields": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
     "types": [
       "jest",
       "@testing-library/jest-dom"
     ],
-    "incremental": true
-    //    "skipDefaultLibCheck": true,
-    //    "plugins": [
-    //      {
-    //        "name": "next"
-    //      }
-    //    ]
+    "incremental": true,
+    "skipDefaultLibCheck": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "src",
     "jest.config.ts",
-    //    "./dist/types/**/*.ts",
+        "./dist/types/**/*.ts",
     "./next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-    //    ".next/types/**/*.ts"
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "./dist/types/**/*.ts"
   ],
   "exclude": [
     "./node_modules"
