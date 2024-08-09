@@ -9,18 +9,15 @@ import React from 'react';
 import { PlanetDetails } from '../../types/types.ts';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
 
-// Mock the downloadCSV function
 jest.mock('../../helpers/csvHelper', () => ({
 	downloadCSV: jest.fn(() => 'mockedURL'),
 }));
 
-// Mock URL methods
 beforeAll(() => {
 	global.URL.createObjectURL = jest.fn(() => 'mockedURL');
 	global.URL.revokeObjectURL = jest.fn();
 });
 
-// Create a mock store with initial state
 const store = configureStore({
 	reducer: {
 		results: resultsReducer,

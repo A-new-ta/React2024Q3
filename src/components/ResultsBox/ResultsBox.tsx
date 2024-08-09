@@ -54,11 +54,6 @@ const ResultsBox: React.FC<Props> = ({
 		}
 	}, [searchTerm, push, onCloseDetails]);
 
-	// const handlePageChange = (newPage: number) => {
-	// 	onCloseDetails();
-	// 	onPageChange(newPage);
-	// };
-
 	const handleContainerClick = () => {
 		onCloseDetails();
 	};
