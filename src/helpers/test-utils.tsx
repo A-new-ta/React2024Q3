@@ -6,6 +6,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import resultsReducer from '../store/resultsSlice.ts';
 import type { RootState } from '../store/store.ts';
 import planetDetailsReducer from '../store/planetDetailsSlice.ts';
+import { ThemeProvider } from '../context/ThemeContext.tsx';
+import { store as defaultStore } from '../store/store.ts';
 
 type PreloadedState = Partial<RootState>;
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
@@ -32,4 +34,16 @@ export function renderWithProviders(
 	);
 
 	return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+}
+
+export function renderWithProvidersNext(ui, { store = defaultStore } = {}) {
+	function Wrapper({ children }) {
+		return (
+			<Provider store={store}>
+				<ThemeProvider>{children}</ThemeProvider>
+			</Provider>
+		);
+	}
+
+	return render(ui, { wrapper: Wrapper });
 }

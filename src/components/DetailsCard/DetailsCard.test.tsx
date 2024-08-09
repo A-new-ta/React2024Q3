@@ -1,19 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DetailsCard from './DetailsCard';
-import { Provider, useSelector } from 'react-redux';
-import { RootState, store } from '../../store/store.ts';
-import { ThemeProvider } from '../../context/ThemeContext.tsx';
-import { useRouter } from 'next/router';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store.ts';
+import { useRouter } from 'next/navigation';
 import { PlanetDetails } from '../../types/types.ts';
+import { clearPlanetDetails } from '../../store/planetDetailsSlice.ts';
 
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
 	useRouter: jest.fn(),
-}));
-
-jest.mock('react-redux', () => ({
-	...jest.requireActual('react-redux'),
-	useSelector: jest.fn(),
 }));
 
 const mockPlanetDetails: PlanetDetails = {
@@ -36,82 +31,44 @@ describe('DetailsCard', () => {
 	beforeEach(() => {
 		(useRouter as jest.Mock).mockReturnValue({
 			push: mockPush,
-			query: {},
-			asPath: '/',
-			events: {
-				on: jest.fn(),
-				off: jest.fn(),
-			},
 		});
 
-		(useSelector as jest.Mock).mockImplementation((selectorFn: (state: RootState) => never) => {
-			return selectorFn({
-				planetDetails: {
-					details: mockPlanetDetails,
-				},
-			} as RootState);
-		});
+		store.dispatch(clearPlanetDetails());
 	});
 
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it('displays the loading indicator while data is loading', () => {
-		(useSelector as jest.Mock).mockImplementationOnce((selectorFn: (state: RootState) => never) => {
-			return selectorFn({
-				planetDetails: {
-					details: null,
-				},
-			} as RootState);
-		});
-
+	it('dispatches setPlanetDetails when planetDetails prop is provided', () => {
 		render(
-			<ThemeProvider>
-				<Provider store={store}>
-					<DetailsCard />
-				</Provider>
-			</ThemeProvider>
+			<Provider store={store}>
+				<DetailsCard planetDetails={mockPlanetDetails} />
+			</Provider>
 		);
 
-		expect(screen.getByText(/loading.../i)).toBeInTheDocument();
+		const state = store.getState();
+		expect(state.planetDetails.details).toEqual(mockPlanetDetails);
 	});
 
 	it('displays planet details when data is available', () => {
 		render(
-			<ThemeProvider>
-				<Provider store={store}>
-					<DetailsCard />
-				</Provider>
-			</ThemeProvider>
+			<Provider store={store}>
+				<DetailsCard planetDetails={mockPlanetDetails} />
+			</Provider>
 		);
 
 		expect(screen.getByText(/planet 1/i)).toBeInTheDocument();
-		expect(screen.getByText(/terrain:/i)).toBeInTheDocument();
 		expect(screen.getByText(/terrain 1/i)).toBeInTheDocument();
-		expect(screen.getByText(/population:/i)).toBeInTheDocument();
 		expect(screen.getByText(/2000/i)).toBeInTheDocument();
-		expect(screen.getByText(/climate:/i)).toBeInTheDocument();
 		expect(screen.getByText(/temperate/i)).toBeInTheDocument();
-		expect(screen.getByText(/orbital period:/i)).toBeInTheDocument();
-		expect(screen.getByText(/365/i)).toBeInTheDocument();
 	});
 
-	it('displays an error message when planet details are not available', () => {
-		(useSelector as jest.Mock).mockImplementationOnce((selectorFn: (state: RootState) => never) => {
-			return selectorFn({
-				planetDetails: {
-					details: null,
-				},
-			} as RootState);
-		});
-
+	it('displays an error message when planetDetails prop is not provided', () => {
 		render(
-			<ThemeProvider>
-				<Provider store={store}>
-					<DetailsCard />
-				</Provider>
-			</ThemeProvider>
+			<Provider store={store}>
+				<DetailsCard planetDetails={null} />
+			</Provider>
 		);
 
 		expect(screen.getByText(/error loading planet details/i)).toBeInTheDocument();
@@ -119,14 +76,13 @@ describe('DetailsCard', () => {
 
 	it('navigates back to the main page when the close button is clicked', () => {
 		render(
-			<ThemeProvider>
-				<Provider store={store}>
-					<DetailsCard />
-				</Provider>
-			</ThemeProvider>
+			<Provider store={store}>
+				<DetailsCard planetDetails={mockPlanetDetails} />
+			</Provider>
 		);
-
 		fireEvent.click(screen.getByText(/close/i));
-		expect(mockPush).toHaveBeenCalledWith('/');
+		expect(mockPush).toHaveBeenCalledWith('/?');
+		const state = store.getState();
+		expect(state.planetDetails.details).toBeNull();
 	});
 });

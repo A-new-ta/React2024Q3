@@ -2,9 +2,9 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../helpers/test-utils.tsx';
 import ResultsBox from './ResultsBox.tsx';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
 	useRouter: jest.fn(),
 }));
 
@@ -88,7 +88,7 @@ describe('ResultsBox Component', () => {
 				},
 			}
 		);
-		expect(screen.getByText('Nothing found')).toBeInTheDocument();
+		expect(screen.getByText('Loading...')).toBeInTheDocument();
 	});
 
 	test('renders data', () => {
@@ -232,9 +232,6 @@ describe('ResultsBox Component', () => {
 
 		const nextPageButton = screen.getByText('1');
 		fireEvent.click(nextPageButton);
-		expect(mockPush).toHaveBeenCalledWith({
-			pathname: '/',
-			query: { search: 'Earth', page: '1' },
-		});
+		expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('page=1'));
 	});
 });

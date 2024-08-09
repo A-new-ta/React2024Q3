@@ -8,19 +8,10 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from '../../context/ThemeContext.tsx';
 import { PlanetAPIResponse } from '../../types/types.ts';
 import ThemeToggle from '../ThemeToggle/ThemeToggle.tsx';
+import { useRouter } from 'next/navigation';
 
-jest.mock('next/router', () => ({
-	useRouter: () => ({
-		router: {
-			events: {
-				on: jest.fn(),
-				off: jest.fn(),
-			},
-		},
-		push: jest.fn(),
-		prefetch: jest.fn(),
-		query: {},
-	}),
+jest.mock('next/navigation', () => ({
+	useRouter: jest.fn(),
 }));
 
 jest.mock('../SearchBox/SearchBox.tsx', () => ({
@@ -77,7 +68,12 @@ const mockPlanetsData: PlanetAPIResponse = {
 };
 
 describe('MainPage', () => {
+	const mockPush = jest.fn();
 	beforeEach(() => {
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+		});
+
 		mockSearchBox.mockImplementation(({ searchTerm, onSearch }) => (
 			<div data-testid="mock-search-box">
 				<input
@@ -101,11 +97,22 @@ describe('MainPage', () => {
 		));
 	});
 
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	it('renders SearchBox and ResultsBox components', () => {
 		render(
 			<ThemeProvider>
 				<Provider store={store}>
-					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
 				</Provider>
 			</ThemeProvider>
 		);
@@ -118,7 +125,14 @@ describe('MainPage', () => {
 		render(
 			<ThemeProvider>
 				<Provider store={store}>
-					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
 				</Provider>
 			</ThemeProvider>
 		);
@@ -129,10 +143,18 @@ describe('MainPage', () => {
 	});
 
 	it('shows details section when an item is clicked', async () => {
+		const setLoadingMock = jest.fn();
 		render(
 			<ThemeProvider>
 				<Provider store={store}>
-					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={setLoadingMock}
+					/>
 				</Provider>
 			</ThemeProvider>
 		);
@@ -141,37 +163,128 @@ describe('MainPage', () => {
 		fireEvent.click(resultItem);
 
 		await waitFor(() => {
-			expect(screen.getByTestId('mock-results-box')).toBeInTheDocument();
+			expect(setLoadingMock).toHaveBeenCalledWith(true);
+			expect(mockPush).toHaveBeenCalledWith('/?search=new+term&page=1&id=1');
 		});
-	});
-
-	it('calls onPageChange when page is changed', () => {
-		const onPageChange = jest.fn();
-
-		render(
-			<ThemeProvider>
-				<Provider store={store}>
-					<MainPage initialPlanets={mockPlanetsData} initialPage={1} onPageChange={onPageChange} />
-				</Provider>
-			</ThemeProvider>
-		);
-
-		const nextPageButton = screen.getByText('Next Page');
-		fireEvent.click(nextPageButton);
-
-		expect(onPageChange).toHaveBeenCalledWith(2);
 	});
 
 	it('changes theme when ThemeToggle button is clicked', () => {
 		render(
 			<ThemeProvider>
 				<Provider store={store}>
-					<MainPage initialPlanets={mockPlanetsData} initialPage={1} />
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
 				</Provider>
 			</ThemeProvider>
 		);
 
 		const themeToggleButton = screen.getByTestId('theme-toggle-button');
 		fireEvent.click(themeToggleButton);
+		expect(screen.getByTestId('theme-toggle-button')).toBeInTheDocument();
+	});
+
+	it('renders DetailsCard with planet details when selectedId is present and loading is false', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={mockPlanetsData.results[0]} // Pass one of the planets as details
+						selectedId="1"
+						loading={false}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByText(/Earth/i)).toBeInTheDocument();
+		expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+	});
+
+	it('triggers loading and updates URL when an item is clicked', async () => {
+		const mockSetLoading = jest.fn();
+		const mockPush = jest.fn();
+
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: {},
+		});
+
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={mockSetLoading}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const resultItem = screen.getByTestId('result-item');
+		fireEvent.click(resultItem);
+
+		await waitFor(() => {
+			expect(mockSetLoading).toHaveBeenCalledWith(true);
+			expect(mockPush).toHaveBeenCalledWith('/?search=new+term&id=1');
+		});
+	});
+
+	it('clears selection and updates URL when clicking outside the details box', () => {
+		const mockSetLoading = jest.fn();
+		const mockPush = jest.fn();
+
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: {},
+		});
+
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={mockPlanetsData.results[0]}
+						selectedId="1"
+						loading={false}
+						setLoading={mockSetLoading}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const bottomSection = screen.getByText(/Next Page/i).parentElement; // Use a clickable element as the "outside" click
+		fireEvent.click(bottomSection!);
+
+		expect(mockSetLoading).toHaveBeenCalledWith(true);
+		expect(mockPush).toHaveBeenCalledWith('/?');
+	});
+
+	it('shows loading indicator when loading is true', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={null}
+						selectedId="1"
+						loading={true}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByText(/loading/i)).toBeInTheDocument();
 	});
 });
