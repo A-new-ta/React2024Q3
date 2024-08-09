@@ -1,40 +1,50 @@
-import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { ThemeProvider, useTheme } from '../context/ThemeContext';
 import store from '../store/store';
+import { ThemeProvider } from '../context/ThemeContext';
+import MyApp from '../pages/_app';
+import { AppProps } from 'next/app';
 
-jest.mock('../store/store', () => ({
-	__esModule: true,
-	default: {
-		dispatch: jest.fn(),
-		subscribe: jest.fn(),
-		getState: jest.fn(),
-		replaceReducer: jest.fn(),
-	},
-}));
-
-jest.mock('../context/ThemeContext', () => {
-	const originalModule = jest.requireActual('../context/ThemeContext');
+jest.mock('next/head', () => {
 	return {
-		...originalModule,
-		useTheme: jest.fn(() => ({ theme: 'light', toggleTheme: jest.fn() })),
+		__esModule: true,
+		default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 	};
 });
 
-const MockComponent = ({ children }: { children: React.ReactNode }) => <div>{children}</div>;
+const mockComponent = () => <div>Mock Component</div>;
 
-describe('_app.tsx', () => {
-	test('wraps component with ThemeProvider and Redux Provider', () => {
-		render(
-			<Provider store={store}>
-				<ThemeProvider>
-					<MockComponent>Test</MockComponent>
-				</ThemeProvider>
-			</Provider>
-		);
-		const { theme, toggleTheme } = useTheme();
-		expect(theme).toBe('light');
-		expect(typeof toggleTheme).toBe('function');
+const renderApp = (props: Partial<AppProps> = {}) => {
+	const defaultProps: AppProps = {
+		Component: mockComponent,
+		pageProps: {},
+		...props,
+	};
+	return render(
+		<Provider store={store}>
+			<ThemeProvider>
+				<MyApp {...defaultProps} />
+			</ThemeProvider>
+		</Provider>
+	);
+};
+
+describe('MyApp', () => {
+	it('renders the provided component with pageProps', () => {
+		renderApp();
+
+		expect(screen.getByText('Mock Component')).toBeInTheDocument();
+	});
+
+	it('ensures Redux Provider is working by accessing the store', () => {
+		const { getState } = store;
+		renderApp();
+
+		expect(getState()).toBeDefined();
+	});
+
+	it('ensures ThemeProvider is applied', () => {
+		renderApp();
+		expect(document.body).toHaveClass('light');
 	});
 });

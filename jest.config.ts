@@ -3,12 +3,8 @@ export default {
 	testEnvironment: 'jsdom',
 	collectCoverageFrom: [
 		'./src/**/*.{js,jsx,ts,tsx}',
-		'!./src/pages/_app.tsx',
-		'!./src/pages/index.tsx',
 		'!./src/pages/_document.tsx',
-		'!./src/pages/details/[id].tsx',
 		'!./src/store/apiSlice.ts',
-		'!./src/helpers/test-utils.tsx',
 	],
 	transform: {
 		'^.+\\.tsx?$': 'babel-jest',
