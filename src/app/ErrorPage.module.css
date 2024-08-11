@@ -1,0 +1,38 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.pageTitle {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.page p {
+  font-size: 1.5rem;
+}
+
+/* Light Theme Styles */
+.themeLight {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.themeLight .pageTitle {
+  color: #007bff;
+}
+
+/* Dark Theme Styles */
+.themeDark {
+  background-color: #333;
+  color: #fff;
+}
+
+.themeDark .pageTitle {
+  color: #ff5722;
+}

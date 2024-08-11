@@ -1,0 +1,290 @@
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import MainPage from './MainPage.tsx';
+import SearchBox from '../SearchBox/SearchBox.tsx';
+import ResultsBox from '../ResultsBox/ResultsBox.tsx';
+import '@testing-library/jest-dom';
+import { store } from '../../store/store.ts';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '../../context/ThemeContext.tsx';
+import { PlanetAPIResponse } from '../../types/types.ts';
+import ThemeToggle from '../ThemeToggle/ThemeToggle.tsx';
+import { useRouter } from 'next/navigation';
+
+jest.mock('next/navigation', () => ({
+	useRouter: jest.fn(),
+}));
+
+jest.mock('../SearchBox/SearchBox.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
+
+jest.mock('../ResultsBox/ResultsBox.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
+
+jest.mock('../ThemeToggle/ThemeToggle.tsx', () => ({
+	__esModule: true,
+	default: jest.fn(),
+}));
+
+const mockSearchBox = SearchBox as jest.MockedFunction<typeof SearchBox>;
+const mockResultsBox = ResultsBox as jest.MockedFunction<typeof ResultsBox>;
+const mockThemeToggle = ThemeToggle as jest.MockedFunction<typeof ThemeToggle>;
+
+const mockPlanetsData: PlanetAPIResponse = {
+	results: [
+		{
+			name: 'Earth',
+			terrain: 'Varied',
+			population: '7 billion',
+			id: '1',
+			url: 'dfg',
+			diameter: '12',
+			gravity: '1',
+			climate: 'qwe',
+			orbital_period: '34',
+			rotation_period: '45',
+			surface_water: '56',
+		},
+		{
+			name: 'Mars',
+			terrain: 'Desert',
+			population: '0',
+			id: '2',
+			url: 'dfg',
+			diameter: '12',
+			gravity: '1',
+			climate: 'qwe',
+			orbital_period: '34',
+			rotation_period: '45',
+			surface_water: '56',
+		},
+	],
+	count: 2,
+	next: 'nextPageUrl',
+	previous: null,
+};
+
+describe('MainPage', () => {
+	const mockPush = jest.fn();
+	beforeEach(() => {
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+		});
+
+		mockSearchBox.mockImplementation(({ searchTerm, onSearch }) => (
+			<div data-testid="mock-search-box">
+				<input
+					data-testid="search-input"
+					value={searchTerm}
+					onChange={(e) => onSearch(e.target.value)}
+				/>
+			</div>
+		));
+
+		mockResultsBox.mockImplementation(({ onItemClick, onPageChange }) => (
+			<div data-testid="mock-results-box">
+				<div data-testid="result-item" onClick={() => onItemClick('1')}>
+					Item 1
+				</div>
+				<button onClick={() => onPageChange && onPageChange(2)}>Next Page</button>
+			</div>
+		));
+		mockThemeToggle.mockImplementation(() => (
+			<button data-testid="theme-toggle-button">Toggle Theme</button>
+		));
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
+	it('renders SearchBox and ResultsBox components', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByTestId('mock-search-box')).toBeInTheDocument();
+		expect(screen.getByTestId('mock-results-box')).toBeInTheDocument();
+	});
+
+	it('updates search term state on input change', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const input = screen.getByTestId('search-input');
+		fireEvent.change(input, { target: { value: 'new term' } });
+		expect(input).toHaveValue('new term');
+	});
+
+	it('shows details section when an item is clicked', async () => {
+		const setLoadingMock = jest.fn();
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={setLoadingMock}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const resultItem = screen.getByTestId('result-item');
+		fireEvent.click(resultItem);
+
+		await waitFor(() => {
+			expect(setLoadingMock).toHaveBeenCalledWith(true);
+			expect(mockPush).toHaveBeenCalledWith('/?search=new+term&page=1&id=1');
+		});
+	});
+
+	it('changes theme when ThemeToggle button is clicked', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						initialPage={1}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const themeToggleButton = screen.getByTestId('theme-toggle-button');
+		fireEvent.click(themeToggleButton);
+		expect(screen.getByTestId('theme-toggle-button')).toBeInTheDocument();
+	});
+
+	it('renders DetailsCard with planet details when selectedId is present and loading is false', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={mockPlanetsData.results[0]} // Pass one of the planets as details
+						selectedId="1"
+						loading={false}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByText(/Earth/i)).toBeInTheDocument();
+		expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+	});
+
+	it('triggers loading and updates URL when an item is clicked', async () => {
+		const mockSetLoading = jest.fn();
+		const mockPush = jest.fn();
+
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: {},
+		});
+
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={null}
+						selectedId={null}
+						loading={false}
+						setLoading={mockSetLoading}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const resultItem = screen.getByTestId('result-item');
+		fireEvent.click(resultItem);
+
+		await waitFor(() => {
+			expect(mockSetLoading).toHaveBeenCalledWith(true);
+			expect(mockPush).toHaveBeenCalledWith('/?search=new+term&id=1');
+		});
+	});
+
+	it('clears selection and updates URL when clicking outside the details box', () => {
+		const mockSetLoading = jest.fn();
+		const mockPush = jest.fn();
+
+		(useRouter as jest.Mock).mockReturnValue({
+			push: mockPush,
+			query: {},
+		});
+
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={mockPlanetsData.results[0]}
+						selectedId="1"
+						loading={false}
+						setLoading={mockSetLoading}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		const bottomSection = screen.getByText(/Next Page/i).parentElement; // Use a clickable element as the "outside" click
+		fireEvent.click(bottomSection!);
+
+		expect(mockSetLoading).toHaveBeenCalledWith(true);
+		expect(mockPush).toHaveBeenCalledWith('/?');
+	});
+
+	it('shows loading indicator when loading is true', () => {
+		render(
+			<ThemeProvider>
+				<Provider store={store}>
+					<MainPage
+						initialPlanets={mockPlanetsData}
+						planetDetails={null}
+						selectedId="1"
+						loading={true}
+						setLoading={jest.fn()}
+					/>
+				</Provider>
+			</ThemeProvider>
+		);
+
+		expect(screen.getByText(/loading/i)).toBeInTheDocument();
+	});
+});

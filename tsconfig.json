@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "types": [
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "incremental": true,
+    "skipDefaultLibCheck": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "src",
+    "jest.config.ts",
+    "./next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "./dist/types/**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
+}

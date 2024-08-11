@@ -1,0 +1,80 @@
+.topSection {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mainPage {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.leftSection {
+  width: 100%;
+  transition: width 0.3s;
+}
+
+.leftSectionShrink {
+  width: 70%;
+}
+
+.rightSection {
+  width: 30%;
+  padding: 20px;
+  border-left: 1px solid #ddd;
+  position: relative;
+}
+
+.bottomSection {
+  height: 90%;
+  display: flex;
+}
+.rightSection button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer
+}
+.rightSection button:focus {
+  outline: none;
+}
+
+/* Light Theme */
+.mainPageThemeLight {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.topSectionThemeLight {
+  background-color: #f0f0f0;
+}
+
+.rightSectionThemeLight {
+  background-color: #f0f0f0;
+  border-left-color: #ddd;
+}
+.rightSectionThemeLight button {
+  color: #000000;
+}
+
+/* Dark Theme */
+.mainPageThemeDark {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.topSectionThemeDark {
+  background-color: #444444;
+}
+
+.rightSectionThemeDark {
+  background-color: #444444;
+  border-left-color: #555555;
+}
+.rightSectionThemeDark button {
+  color: #ffffff;
+}
