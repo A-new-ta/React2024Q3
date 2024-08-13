@@ -1,13 +1,12 @@
 import React from 'react';
 import './App.css';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
-import MainPage from './pages/MainPage/MainPage.tsx';
+import { Outlet } from 'react-router-dom';
 
 const App: React.FC = () => {
 	return (
-		<ErrorBoundary>
-			<MainPage />
-		</ErrorBoundary>
+		<main className="main">
+			<Outlet />
+		</main>
 	);
 };
 export default App;

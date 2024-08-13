@@ -5,19 +5,3 @@
 	padding: 2rem;
 	text-align: center;
 }
-
-.error-button {
-	background-color: indianred;
-	border: none;
-	color: black;
-	padding: 10px 20px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
-	border-radius: 4px;
-}
-.error-button:hover {
-	background-color: darkred;
-}
