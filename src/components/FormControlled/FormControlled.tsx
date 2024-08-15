@@ -1,42 +1,48 @@
 import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitForm } from '../../store/formSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { validationSchema } from '../../helpers/validationSchema';
 import { FormData } from '../../types/types';
-import Autocomplete from '../Autocomplete/Autocomplete.tsx';
 import styles from './FormControlled.module.css';
+import { RootState } from '../../store/store.ts';
+import { convertToBase64 } from '../../helpers/convertToBase64.ts';
+import PasswordStrengthIndicator from '../PasswordStrengthIndicator/PasswordStrengthIndicator.tsx';
 
 const FormControlled = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const countries = useSelector((state: RootState) => state.country.countries);
 	const {
 		register,
 		handleSubmit,
-		setValue,
-		control,
-		formState: { errors },
+		formState: { errors, isValid },
+		watch,
 	} = useForm<FormData>({
 		resolver: yupResolver(validationSchema),
+		mode: 'all',
 	});
 
-	const onSubmit = (data: FormData) => {
-		dispatch(submitForm(data));
-		navigate('/');
-	};
-
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setValue('picture', reader.result as string);
-			};
-			reader.readAsDataURL(file);
+	const onSubmit = async (data: FormData) => {
+		try {
+			const uploadFile = data.picture[0];
+			const convertedImage = await convertToBase64(uploadFile);
+			dispatch(
+				submitForm({
+					...data,
+					picture: convertedImage,
+					isNew: true,
+				})
+			);
+			navigate('/');
+		} catch (error) {
+			console.log(error);
 		}
 	};
+
+	const passwordValue = watch('password', '');
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
@@ -70,6 +76,7 @@ const FormControlled = () => {
 				</label>
 				<input id="password" type="password" {...register('password')} className={styles.input} />
 				{errors.password && <p className={styles.errorMessage}>{errors.password.message}</p>}
+				<PasswordStrengthIndicator password={passwordValue} />
 			</div>
 
 			<div className={styles.formGroup}>
@@ -119,8 +126,8 @@ const FormControlled = () => {
 				<input
 					id="picture"
 					type="file"
-					accept="image/png, image/jpeg"
-					onChange={handleFileChange}
+					accept=".jpeg,.jpg,.png"
+					{...register('picture')}
 					className={styles.fileInput}
 				/>
 				{errors.picture && <p className={styles.errorMessage}>{errors.picture.message}</p>}
@@ -130,16 +137,22 @@ const FormControlled = () => {
 				<label htmlFor="country" className={styles.label}>
 					Country:
 				</label>
-				<Controller
-					name="country"
-					control={control}
-					render={({ field }) => <Autocomplete value={field.value} onChange={field.onChange} />}
+				<input
+					type="text"
+					id="country"
+					list="country-list"
+					{...register('country')}
+					className={styles.input}
 				/>
-				{/*<input id="country" {...register('country')} className={styles.input} />*/}
+				<datalist id="country-list">
+					{countries.map((country) => (
+						<option key={country}>{country}</option>
+					))}
+				</datalist>
 				{errors.country && <p className={styles.errorMessage}>{errors.country.message}</p>}
 			</div>
 
-			<button type="submit" className={styles.button}>
+			<button type="submit" className={styles.button} disabled={!isValid}>
 				Submit
 			</button>
 		</form>

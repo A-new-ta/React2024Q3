@@ -47,3 +47,23 @@
   font-weight: bold;
   margin-bottom: 10px;
 }
+
+.pictureContainer {
+  margin-top: 10px;
+}
+
+.picture {
+  width: 50%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.tile {
+  transition: background-color 0.5s ease;
+}
+
+.newData {
+  background-color: #e0ffe0;
+  border: 2px solid green;
+}

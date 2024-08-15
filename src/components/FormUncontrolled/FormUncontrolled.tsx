@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitForm } from '../../store/formSlice.ts';
 import { useNavigate } from 'react-router-dom';
 import useFormUncontrolled from '../../helpers/useFormUncontrolled.ts';
-import Autocomplete from '../Autocomplete/Autocomplete.tsx';
 import styles from './FormUncontrolled.module.css';
+import { RootState } from '../../store/store.ts';
 
 const FormUncontrolled = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const countries = useSelector((state: RootState) => state.country.countries);
 
 	const {
 		nameRef,
@@ -19,23 +20,26 @@ const FormUncontrolled = () => {
 		genderRef,
 		acceptTermsRef,
 		pictureRef,
+		countryRef,
 		getFormData,
 		validateForm,
 	} = useFormUncontrolled();
 
 	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
-	const [country, setCountry] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const formData = getFormData();
-		formData.country = country;
+		// formData.country = country;
 
 		const validationErrors = await validateForm(formData);
 
 		if (validationErrors) {
 			setErrors(validationErrors);
+			setIsSubmitting(false);
 		} else {
+			setIsSubmitting(true);
 			if (pictureRef.current?.files?.[0]) {
 				const reader = new FileReader();
 				reader.onloadend = () => {
@@ -136,11 +140,23 @@ const FormUncontrolled = () => {
 				<label htmlFor="country" className={styles.label}>
 					Country:
 				</label>
-				<Autocomplete value={country} onChange={setCountry} />
+				<input
+					type="text"
+					id="country"
+					list="country-list"
+					ref={countryRef}
+					className={styles.input}
+				/>
+				<datalist id="country-list">
+					{countries.map((country) => (
+						<option key={country}>{country}</option>
+					))}
+				</datalist>
+				{/*<Autocomplete value={country} onChange={setCountry}/>*/}
 				{errors.country && <p className={styles.errorMessage}>{errors.country}</p>}
 			</div>
 
-			<button type="submit" className={styles.button}>
+			<button type="submit" className={styles.button} disabled={isSubmitting}>
 				Submit
 			</button>
 		</form>

@@ -25,11 +25,17 @@ const formSlice = createSlice({
 	initialState,
 	reducers: {
 		submitForm: (state, action: PayloadAction<FormData>) => {
-			state.data.push(action.payload);
+			state.formsData.push(action.payload);
+		},
+		clearNewFlag: (state) => {
+			state.formsData = state.formsData.map((data) => ({
+				...data,
+				isNew: false,
+			}));
 		},
 	},
 });
 
-export const { submitForm } = formSlice.actions;
+export const { submitForm, clearNewFlag } = formSlice.actions;
 
 export default formSlice.reducer;

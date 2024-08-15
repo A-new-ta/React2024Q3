@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store.ts';
 import styles from './MainPage.module.css';
+import { clearNewFlag } from '../../store/formSlice.ts';
 
 const MainPage = () => {
+	const dispatch = useDispatch();
 	const formsData = useSelector((state: RootState) => state.form.formsData) || [];
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			dispatch(clearNewFlag());
+		}, 5000);
+		return () => clearTimeout(timer);
+	}, [dispatch]);
 
 	return (
 		<div className={styles.mainContainer}>
@@ -25,7 +34,11 @@ const MainPage = () => {
 				<div className={styles.tilesContainer}>
 					{formsData.map((data, index) => (
 						<div key={index} className={`${styles.tile} ${data.isNew ? styles.newData : ''}`}>
-							<div className={styles.tileTitle}>Submitted Data {index + 1}</div>
+							{data.picture && (
+								<div className={styles.pictureContainer}>
+									<img src={data.picture} alt="Submitted" className={styles.picture} />
+								</div>
+							)}
 							<p>
 								<strong>Name:</strong> {data.name}
 							</p>

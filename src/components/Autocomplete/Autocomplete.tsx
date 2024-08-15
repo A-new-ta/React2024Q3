@@ -39,13 +39,14 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ value, onChange }) => {
 				placeholder="Select a country"
 				list="countries"
 				className={styles.fileInput}
+				autoComplete="off"
 			/>
 			{filteredCountries.length > 0 && (
 				<ul>
 					{filteredCountries.map((country, index) => (
-						<li key={index} onClick={() => handleSelect(country)}>
+						<option key={index} onClick={() => handleSelect(country)}>
 							{country}
-						</li>
+						</option>
 					))}
 				</ul>
 			)}
