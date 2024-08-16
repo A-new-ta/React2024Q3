@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import useFormUncontrolled from '../../helpers/useFormUncontrolled.ts';
 import styles from './FormUncontrolled.module.css';
 import { RootState } from '../../store/store.ts';
+import { convertToBase64 } from '../../helpers/convertToBase64.ts';
+import PasswordStrengthIndicator from '../PasswordStrengthIndicator/PasswordStrengthIndicator.tsx';
 
 const FormUncontrolled = () => {
 	const dispatch = useDispatch();
@@ -26,31 +28,34 @@ const FormUncontrolled = () => {
 	} = useFormUncontrolled();
 
 	const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [passwordValue, setPasswordValue] = useState('');
+	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPasswordValue(e.target.value);
+	};
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const formData = getFormData();
-		// formData.country = country;
 
 		const validationErrors = await validateForm(formData);
 
 		if (validationErrors) {
 			setErrors(validationErrors);
-			setIsSubmitting(false);
 		} else {
-			setIsSubmitting(true);
-			if (pictureRef.current?.files?.[0]) {
-				const reader = new FileReader();
-				reader.onloadend = () => {
-					formData.picture = reader.result as string;
-					dispatch(submitForm(formData));
-					navigate('/');
-				};
-				reader.readAsDataURL(pictureRef.current.files[0]);
-			} else {
-				dispatch(submitForm(formData));
+			try {
+				const uploadFile = pictureRef.current?.files?.[0];
+				if (uploadFile) {
+					formData.picture = await convertToBase64(uploadFile);
+				}
+				dispatch(
+					submitForm({
+						...formData,
+						isNew: true,
+					})
+				);
 				navigate('/');
+			} catch (error) {
+				console.log(error);
 			}
 		}
 	};
@@ -85,8 +90,15 @@ const FormUncontrolled = () => {
 				<label htmlFor="password" className={styles.label}>
 					Password:
 				</label>
-				<input id="password" ref={passwordRef} type="password" className={styles.input} />
+				<input
+					id="password"
+					ref={passwordRef}
+					type="password"
+					className={styles.input}
+					onChange={handlePasswordChange}
+				/>
 				{errors.password && <p className={styles.errorMessage}>{errors.password}</p>}
+				<PasswordStrengthIndicator password={passwordValue} />
 			</div>
 
 			<div className={styles.formGroup}>
@@ -130,7 +142,7 @@ const FormUncontrolled = () => {
 					id="picture"
 					ref={pictureRef}
 					type="file"
-					accept="image/png, image/jpeg"
+					accept=".jpeg,.jpg,.png"
 					className={styles.fileInput}
 				/>
 				{errors.picture && <p className={styles.errorMessage}>{errors.picture}</p>}
@@ -152,11 +164,10 @@ const FormUncontrolled = () => {
 						<option key={country}>{country}</option>
 					))}
 				</datalist>
-				{/*<Autocomplete value={country} onChange={setCountry}/>*/}
 				{errors.country && <p className={styles.errorMessage}>{errors.country}</p>}
 			</div>
 
-			<button type="submit" className={styles.button} disabled={isSubmitting}>
+			<button type="submit" className={styles.button}>
 				Submit
 			</button>
 		</form>

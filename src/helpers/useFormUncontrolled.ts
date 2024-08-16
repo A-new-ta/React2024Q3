@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { validationSchema } from './validationSchema.ts';
+import { validationSchemaUncontrolled } from './validationSchemaUncontrolled.ts';
 import { FormData } from '../types/types';
 
 const useFormUncontrolled = () => {
@@ -29,14 +29,20 @@ const useFormUncontrolled = () => {
 
 	const validateForm = async (data: FormData) => {
 		try {
-			await validationSchema.validate(data, { abortEarly: false });
+			await validationSchemaUncontrolled.validate(data, { abortEarly: false });
 			return null;
 		} catch (validationErrors) {
-			//fix never
-			return validationErrors.inner.reduce((acc: never, error: never) => {
-				acc[error.path] = error.message;
-				return acc;
-			}, {});
+			if (Array.isArray(validationErrors.inner)) {
+				return validationErrors.inner.reduce(
+					(acc: { [key: string]: string }, error: { path: string; message: string }) => {
+						acc[error.path] = error.message;
+						return acc;
+					},
+					{}
+				);
+			} else {
+				return { form: validationErrors.message };
+			}
 		}
 	};
 

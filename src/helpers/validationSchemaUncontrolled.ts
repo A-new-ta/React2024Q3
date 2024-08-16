@@ -1,16 +1,17 @@
 import * as yup from 'yup';
 
-export const validationSchema = yup.object().shape({
+export const validationSchemaUncontrolled = yup.object().shape({
 	name: yup
 		.string()
-		.required('Name is required')
-		.matches(/^[A-Z]/, 'Name should start with an uppercase letter'),
+		.matches(/^[A-Z]/, 'Name should start with an uppercase letter')
+		.required('Name is required'),
 	age: yup
 		.number()
-		.transform((value, originalValue) => (originalValue.trim() === '' ? null : value))
+		.transform((value, originalValue) => (originalValue === 0 ? null : value))
 		.nullable()
-		.positive('Age must be a positive number')
-		.required('Age is required'),
+		.required('Age is required')
+		.positive('Age must be a positive number'),
+
 	email: yup.string().email('Invalid email format').required('Email is required'),
 	password: yup
 		.string()
@@ -32,16 +33,18 @@ export const validationSchema = yup.object().shape({
 	country: yup.string().required('Country is required'),
 	picture: yup
 		.mixed()
-		.test('fileSize', 'File size is too large', (value) => {
-			if (!value || value.length === 0) {
+		.test('fileSize', 'File size is too large', function (value) {
+			if (!value) {
 				return true;
 			}
-			return value[0]?.size <= 5000000;
+			const { size } = value;
+			return size <= 5000000;
 		})
-		.test('fileFormat', 'Unsupported Format', (value) => {
-			if (!value || value.length === 0) {
+		.test('fileFormat', 'Unsupported Format', function (value) {
+			if (!value) {
 				return true;
 			}
-			return ['image/jpg', 'image/jpeg', 'image/png'].includes(value[0]?.type);
+			const { type } = value;
+			return ['image/jpg', 'image/jpeg', 'image/png'].includes(type);
 		}),
 });

@@ -22,7 +22,7 @@ const FormControlled = () => {
 		watch,
 	} = useForm<FormData>({
 		resolver: yupResolver(validationSchema),
-		mode: 'all',
+		mode: 'onChange',
 	});
 
 	const onSubmit = async (data: FormData) => {
